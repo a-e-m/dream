@@ -2,10 +2,10 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create
 
 function preload() {
 
-    game.load.image('sky', '../img/sky.png');
-    game.load.image('ground', '../img/platform.png');
-    game.load.image('star', '../img/star.png');
-    game.load.spritesheet('dude', '../img/bennett.png', 52, 82);
+    game.load.image('sky', './img/sky.png');
+    game.load.image('ground', './img/platform.png');
+    game.load.image('star', './img/star.png');
+    game.load.spritesheet('dude', './img/bennett.png', 52, 82);
 
 }
 
