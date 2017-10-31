@@ -54,13 +54,15 @@ function create() {
     game.physics.arcade.enable(player);
 
     //  Player physics properties. Give the little guy a slight bounce.
+	player.body.setSize(52, 76, 0, 0);
     player.body.bounce.y = 0.1;
     player.body.gravity.y = 500;
     player.body.collideWorldBounds = true;
 
     //  Our two animations, walking left and right.
-    player.animations.add('left', [0, 1, 2, 3], 10, true);
-    player.animations.add('right', [5, 6, 7, 8], 10, true);
+    player.animations.add('walk', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 15, true);
+	player.animations.add('jump', [2], 15, true);
+	player.anchor.setTo(0.5, 0.5);
 
     //  Finally some stars to collect
     stars = game.add.group();
@@ -104,16 +106,22 @@ function update() {
     if (cursors.left.isDown)
     {
         //  Move to the left
-        player.body.velocity.x = -150;
-
-        player.animations.play('left');
+        player.body.velocity.x = -100;
+		player.scale.x = -1;
+		if (player.body.touching.down)
+			player.animations.play('walk');
+		else
+			player.animations.play('jump');
     }
     else if (cursors.right.isDown)
     {
         //  Move to the right
-        player.body.velocity.x = 150;
-
-        player.animations.play('right');
+        player.body.velocity.x = 100;
+		player.scale.x = 1;
+		if (player.body.touching.down)
+			player.animations.play('walk');
+		else
+			player.animations.play('jump');
     }
     else
     {
@@ -127,6 +135,7 @@ function update() {
     if (cursors.up.isDown && player.body.touching.down)
     {
         player.body.velocity.y = -350;
+		player.animations.play('jump');
     }
 
 }
