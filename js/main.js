@@ -156,7 +156,7 @@ function update() {
     if (cursors.left.isDown)
     {
         //  Move to the left
-		if (checkIfCanJump())
+		if (checkIfCanJump() || player.data.water)
 			player.animations.play('walk');
 		else
 			player.animations.play('jump');
@@ -168,7 +168,7 @@ function update() {
         //  Move to the right
         player.body.moveRight(100);
 		player.scale.x = 1;
-		if (checkIfCanJump())
+		if (checkIfCanJump() || player.data.water)
 			player.animations.play('walk');
 		else
 			player.animations.play('jump');
@@ -180,19 +180,24 @@ function update() {
 
         //player.frame = 4;
     }
-    
+
     //  Allow the player to jump if they are touching the ground.
 	if (player.data.water) {
+		player.body.fixedRotation = false;
 		if (cursors.up.isDown)
-			player.body.moveUp(150);
+			player.body.moveUp(200);
 		else if (cursors.down.isDown)
 			player.body.moveDown(150);
 	}
-    else if (cursors.up.isDown && checkIfCanJump())
-    {
-        player.body.moveUp(300);
-		player.animations.play('jump');
-    }
+    else {
+		if (cursors.up.isDown && checkIfCanJump()) {
+			player.body.moveUp(300);
+			player.animations.play('jump');
+		}
+		player.body.fixedRotation = true;
+		player.body.setZeroRotation();
+	}
+
 
 }
 
