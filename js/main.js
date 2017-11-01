@@ -194,8 +194,9 @@ function update() {
 			player.body.moveUp(300);
 			player.animations.play('jump');
 		}
-		player.body.fixedRotation = true;
+		player.body.data.angle = 0
 		player.body.setZeroRotation();
+		//player.body.fixedRotation = true;
 	}
 
 
