@@ -16,5 +16,5 @@ x = 0
 for image in images:
 	sheet.paste(image, (x, 0, x + image.width, image.height))
 	x += width
-sheet = sheet.resize((sheet.width // 10, sheet.height // 10), Image.LANCZOS)
+sheet = sheet.resize((sheet.width // 5, sheet.height // 5), Image.LANCZOS)
 sheet.save('bennett.png')
