@@ -24,17 +24,17 @@ var scoreText;
 
 function create() {
 	game.debug.dirty = true;
-	game.add.tileSprite(0, 0, 1920, 600, 'sky');
+	game.add.tileSprite(0, 0, 1920, 800, 'sky');
 		var waterLevel = 600;
 
-		game.add.tileSprite(0, waterLevel, 1920, 600, 'water');
+		//game.add.tileSprite(0, waterLevel, 1920, 600, 'water');
 
 	
 	map = game.add.tilemap('map');
 
     map.addTilesetImage('Basic', 'tiles');
 
-    map.setCollisionBetween(1, 12);
+    map.setCollisionBetween(12, 26);
 
     layer = map.createLayer('Tile Layer 1');
 
@@ -59,8 +59,8 @@ function create() {
 	player.body.clearShapes();
 	//var rect = new Phaser.Rectangle(0, 0, 51, 152);
 	
-	player.body.addRectangle(40, 145, 0, 0, 0);
-	player.body.addRectangle(70, 30, 0, 60, 0);
+	player.body.addRectangle(40, 140, 0, 0, 0);
+	player.body.addRectangle(70, 20, 0, 60, 0);
 
 	player.body.dirty = true;
 	player.body.mass = 5;
@@ -102,7 +102,7 @@ function create() {
     for (var i = 0; i < 4; i++)
     {
         //  Create a star inside of the 'stars' group
-        var star = stars.create(i * 100, 300, 'star');
+        var star = stars.create(200 + i * 100, 300, 'star');
         //  Let gravity do its thing
         //star.body.gravity.y = 300;
 
@@ -118,7 +118,7 @@ function create() {
 	// Create "water surface"
 	var bodies = _.map(stars.children, function(s) {return s.body.data;});
 	bodies.push(player.body.data);
-	setupBuoyancy(bodies, p2.vec2.fromValues(0, game.physics.p2.pxmi(waterLevel)));
+	//setupBuoyancy(bodies, p2.vec2.fromValues(0, game.physics.p2.pxmi(waterLevel)));
 
     //  The score
     //scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
