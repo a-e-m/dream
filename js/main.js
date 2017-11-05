@@ -8,7 +8,10 @@ function preload() {
 	game.load.image('water', './img/water.png');
 
     game.load.spritesheet('dude', './img/bennett.png', 104, 164);
+	
+	game.load.tilemap('map', './img/level.json', null, Phaser.Tilemap.TILED_JSON);
 
+    game.load.image('tiles', './img/tiles.png');
 }
 
 var player;
@@ -22,46 +25,31 @@ var scoreText;
 function create() {
 	game.debug.dirty = true;
 	game.add.tileSprite(0, 0, 1920, 600, 'sky');
-	game.world.setBounds(0, 0, 1920, 600);
+		var waterLevel = 600;
+
+		game.add.tileSprite(0, waterLevel, 1920, 600, 'water');
+
+	
+	map = game.add.tilemap('map');
+
+    map.addTilesetImage('Basic', 'tiles');
+
+    map.setCollisionBetween(1, 12);
+
+    layer = map.createLayer('Tile Layer 1');
+
+    layer.resizeWorld();
+
+	// game.world.setBounds(0, 0, 1920, 600);
     //  We're going to be using physics, so enable the Arcade Physics system
     game.physics.startSystem(Phaser.Physics.P2JS);
 	game.physics.p2.gravity.y = 300;
     game.physics.p2.world.defaultContactMaterial.friction = 0.3;
     game.physics.p2.world.setGlobalStiffness(1e5);
+	game.physics.p2.convertTilemap(map, layer);
 
-
-    //  A simple background for our game
-    //game.add.sprite(0, 0, 'sky');
-	var waterLevel = 400
-	game.add.tileSprite(0, waterLevel, 1920, 600, 'water');
-	
-    //  The platforms group contains the ground and the 2 ledges we can jump on
-    platforms = game.add.group();
-
-    // Here we create the ground.
-    var ground = platforms.create(0, game.world.height - 64, 'ground');
-	game.physics.p2.enable(ground);
-    //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-    //ground.scale.setTo(2, 2);
-
-    //  This stops it from falling away when you jump on it
-    ground.body.static = true;
-
-    //  Now let's create two ledges
-    var ledge = platforms.create(800, 450, 'ground');
-	game.physics.p2.enable(ledge);
-    ledge.body.static = true;
-	
-	var ledge = platforms.create(1200, 400, 'ground');
-	game.physics.p2.enable(ledge);
-    ledge.body.static = true;
-
-    ledge = platforms.create(200, 400, 'ground');
-	game.physics.p2.enable(ledge);
-    ledge.body.static = true;
-	
     // The player and its settings
-    player = game.add.sprite(1000, 200, 'dude');
+    player = game.add.sprite(10, 200, 'dude');
 
     //  Enable if for physics. This creates a default rectangular body.
     game.physics.p2.enable(player);
@@ -111,10 +99,10 @@ function create() {
     //stars.enableBody = true;
 
     //  Here we'll create 12 of them evenly spaced apart
-    for (var i = 0; i < 12; i++)
+    for (var i = 0; i < 4; i++)
     {
         //  Create a star inside of the 'stars' group
-        var star = stars.create(520 + i * 100, 300, 'star');
+        var star = stars.create(i * 100, 300, 'star');
         //  Let gravity do its thing
         //star.body.gravity.y = 300;
 
@@ -133,7 +121,7 @@ function create() {
 	setupBuoyancy(bodies, p2.vec2.fromValues(0, game.physics.p2.pxmi(waterLevel)));
 
     //  The score
-    scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+    //scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
 
     //  Our controls.
     cursors = game.input.keyboard.createCursorKeys();
@@ -191,7 +179,7 @@ function update() {
 	}
     else {
 		if (cursors.up.isDown && checkIfCanJump()) {
-			player.body.moveUp(300);
+			player.body.moveUp(350);
 			player.animations.play('jump');
 		}
 		player.body.data.angle = 0
