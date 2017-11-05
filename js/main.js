@@ -70,11 +70,11 @@ function create() {
 	//legs = game.physics.p2.createBody(player.x, player.y, 10);
 	legs.body.clearShapes();
 	legs.body.addRectangle(100, 50);
-	var lock = game.physics.p2.createLockConstraint(player, legs, [0, -60]);
+	var lock = game.physics.p2.createLockConstraint(player, legs, [0, -50]);
 	lock.collideConnected = false;
 
 	game.physics.p2.addConstraint(lock);
-	legs.body.debug = true;
+	//legs.body.debug = true;
 	legs.body.fixedRotation = true;
 	//player.body.fixedRotation = true;
 
@@ -86,7 +86,7 @@ function create() {
 	legs.body.angularDamping = 0.99;
 	
 	player.data.water = false;
-	player.body.debug = true;
+    //player.body.debug = true;
 
     var spriteMaterial = game.physics.p2.createMaterial('spriteMaterial', player.body);
     var worldMaterial = game.physics.p2.createMaterial('worldMaterial');
