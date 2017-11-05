@@ -21,14 +21,14 @@ var cursors;
 var stars;
 var score = 0;
 var scoreText;
-var constants = {speed: 300, jump: 300, mass: 10, swim: 400, dive: 200};
+var constants = {speed: 300, jump: 300, mass: 30, swimSpeed: 140, dive: 100};
 
 function create() {
 	game.debug.dirty = true;
 	game.add.tileSprite(0, 0, 4000, 800, 'sky');
-		var waterLevel = 600;
+		var waterLevel = 300;
 
-		//game.add.tileSprite(0, waterLevel, 1920, 600, 'water');
+		game.add.tileSprite(0, waterLevel, 1920, 600, 'water');
 
 	
 	map = game.add.tilemap('map');
@@ -65,7 +65,7 @@ function create() {
 	
 	 legs = game.add.sprite(120, 200, null);
 	 game.physics.p2.enable(legs);
-	 	 legs.body.mass = 90;
+	 	 legs.body.mass = 50;
 
 	//legs = game.physics.p2.createBody(player.x, player.y, 10);
 	legs.body.clearShapes();
@@ -76,7 +76,7 @@ function create() {
 	game.physics.p2.addConstraint(lock);
 	//legs.body.debug = true;
 	legs.body.fixedRotation = true;
-	//player.body.fixedRotation = true;
+	//.body.fixedRotation = true;
 
 	player.body.mass = constants.mass;
     
@@ -105,6 +105,7 @@ function create() {
 
     //  Our two animations, walking left and right.
     player.animations.add('walk', null, 32, true);
+	player.animations.add('swim', null, 16, true);
 	player.animations.add('jump', [2], 15, true);
 	player.anchor.setTo(0.5, 0.5);
 
@@ -126,7 +127,7 @@ function create() {
         //star.body.bounce.y = 0.2 + Math.random() * 0.1;
 
         game.physics.p2.enable(star);
-        star.body.mass = 6;
+        star.body.mass = 40;
         // box.body.static = true;
         star.body.setMaterial(boxMaterial);
     }
@@ -134,7 +135,7 @@ function create() {
 	// Create "water surface"
 	var bodies = _.map(stars.children, function(s) {return s.body.data;});
 	bodies.push(player.body.data);
-	//setupBuoyancy(bodies, p2.vec2.fromValues(0, game.physics.p2.pxmi(waterLevel)));
+	setupBuoyancy(bodies, p2.vec2.fromValues(0, game.physics.p2.pxmi(waterLevel)));
 
     //  The score
     //scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
@@ -157,24 +158,29 @@ function update() {
     //  Reset the players velocity (movement)
     player.body.velocity.x = 0;
 
+	var speed = player.data.water ? constants.swimSpeed : constants.speed;
     if (cursors.left.isDown)
     {
         //  Move to the left
-		if (checkIfCanJump() || player.data.water)
+		if (player.data.water)
+			player.animations.play('swim');
+		else if (checkIfCanJump())
 			player.animations.play('walk');
 		else
 			player.animations.play('jump');
-		legs.body.moveLeft(constants.speed);
-		player.body.moveLeft(constants.speed);
+		legs.body.moveLeft(speed);
+		player.body.moveLeft(speed);
 		player.scale.x = -1;
     }
     else if (cursors.right.isDown)
     {
         //  Move to the right
-        legs.body.moveRight(constants.speed);
-		player.body.moveRight(constants.speed);
+        legs.body.moveRight(speed);
+		player.body.moveRight(speed);
 		player.scale.x = 1;
-		if (checkIfCanJump() || player.data.water)
+		if (player.data.water)
+			player.animations.play('swim');
+		else if (checkIfCanJump())
 			player.animations.play('walk');
 		else
 			player.animations.play('jump');
@@ -190,10 +196,14 @@ function update() {
     //  Allow the player to jump if they are touching the ground.
 	if (player.data.water) {
 		player.body.fixedRotation = false;
-		if (cursors.up.isDown)
-			player.body.moveUp(constants.swim);
-		else if (cursors.down.isDown)
-			player.body.moveDown(constants.swim);
+		if (cursors.up.isDown) {
+			legs.body.moveUp(constants.dive);
+			player.body.moveUp(constants.dive);
+		}
+		else if (cursors.down.isDown) {
+			legs.body.moveDown(constants.dive);
+			player.body.moveDown(constants.dive);
+		}
 	}
     else {
 		if (cursors.up.isDown && checkIfCanJump()) {
@@ -204,6 +214,9 @@ function update() {
 		//player.body.data.angle = 0
 		//player.body.setZeroRotation();
 		//player.body.fixedRotation = true;
+	}
+	if (Math.abs(player.body.rotation) > 0.2) {
+		player.body.rotation = Math.sign(player.body.rotation) * 0.2;
 	}
 
 
@@ -271,8 +284,8 @@ function setupBuoyancy(bodies, plane) {
 	var liftForce = [0,0];
 	var viscousForce = [0,0];
 	var shapeAngle = 0;
-	k = 1.6; // up force per submerged "volume"
-	var c = 0.7; // viscosity
+	k = 7; // up force per submerged "volume"
+	c = 50; // viscosity
 	var v = [0,0];
 	var aabb = new p2.AABB();
 	function applyAABBBuoyancyForces(body, planePosition, k, c){
