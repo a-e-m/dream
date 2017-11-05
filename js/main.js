@@ -34,7 +34,7 @@ function create() {
 
     map.addTilesetImage('Basic', 'tiles');
 
-    map.setCollisionBetween(12, 26);
+    map.setCollisionBetween(9, 32);
 
     layer = map.createLayer('Tile Layer 1');
 
@@ -102,7 +102,7 @@ function create() {
     for (var i = 0; i < 4; i++)
     {
         //  Create a star inside of the 'stars' group
-        var star = stars.create(200 + i * 100, 300, 'star');
+        var star = stars.create(900 + i * 100, 300, 'star');
         //  Let gravity do its thing
         //star.body.gravity.y = 300;
 
