@@ -7,7 +7,7 @@ function preload() {
     game.load.image('star', './img/star.png');
 	game.load.image('water', './img/water.png');
 
-    game.load.spritesheet('dude', './img/bennett.png', 104, 164);
+    game.load.spritesheet('dude', './img/bennett.png', 110, 184);
 	
 	game.load.tilemap('map', './img/level.json', null, Phaser.Tilemap.TILED_JSON);
 
@@ -21,10 +21,11 @@ var cursors;
 var stars;
 var score = 0;
 var scoreText;
+var constants = {speed: 300, jump: 300, mass: 10, swim: 400, dive: 200};
 
 function create() {
 	game.debug.dirty = true;
-	game.add.tileSprite(0, 0, 1920, 800, 'sky');
+	game.add.tileSprite(0, 0, 4000, 800, 'sky');
 		var waterLevel = 600;
 
 		//game.add.tileSprite(0, waterLevel, 1920, 600, 'water');
@@ -33,7 +34,7 @@ function create() {
 	map = game.add.tilemap('map');
 
     map.addTilesetImage('Basic', 'tiles');
-
+	map.setCollisionBetween(6, 8);
     map.setCollisionBetween(48, 120);
 
     layer = map.createLayer('Tile Layer 1');
@@ -49,7 +50,7 @@ function create() {
 	game.physics.p2.convertTilemap(map, layer);
 
     // The player and its settings
-    player = game.add.sprite(10, 200, 'dude');
+    player = game.add.sprite(100, 200, 'dude');
 
     //  Enable if for physics. This creates a default rectangular body.
     game.physics.p2.enable(player);
@@ -59,18 +60,33 @@ function create() {
 	player.body.clearShapes();
 	//var rect = new Phaser.Rectangle(0, 0, 51, 152);
 	
-	player.body.addRectangle(40, 140, 0, 0, 0);
-	player.body.addRectangle(70, 20, 0, 60, 0);
+	player.body.addRectangle(40, 150, 0, 0, 0);
+	//player.body.addRectangle(70, 20, 0, 60, 0);
+	
+	 legs = game.add.sprite(120, 200, null);
+	 game.physics.p2.enable(legs);
+	 	 legs.body.mass = 90;
 
-	player.body.dirty = true;
-	player.body.mass = 5;
+	//legs = game.physics.p2.createBody(player.x, player.y, 10);
+	legs.body.clearShapes();
+	legs.body.addRectangle(100, 50);
+	var lock = game.physics.p2.createLockConstraint(player, legs, [0, -60]);
+	lock.collideConnected = false;
+
+	game.physics.p2.addConstraint(lock);
+	legs.body.debug = true;
+	legs.body.fixedRotation = true;
+	//player.body.fixedRotation = true;
+
+	player.body.mass = constants.mass;
     
-    player.body.fixedRotation = true;
-    player.body.damping = 0.5;
+    player.body.damping = 0.3;
+	legs.body.damping = 0.3;
+	player.body.angularDamping = 0.99;
+	legs.body.angularDamping = 0.99;
 	
 	player.data.water = false;
-	//player.body.debug = true;
-	//player.body.debugBody = true;
+	player.body.debug = true;
 
     var spriteMaterial = game.physics.p2.createMaterial('spriteMaterial', player.body);
     var worldMaterial = game.physics.p2.createMaterial('worldMaterial');
@@ -88,7 +104,7 @@ function create() {
 	game.physics.p2.createContactMaterial(boxMaterial, boxMaterial, { friction: 0.2 });
 
     //  Our two animations, walking left and right.
-    player.animations.add('walk', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 15, true);
+    player.animations.add('walk', null, 32, true);
 	player.animations.add('jump', [2], 15, true);
 	player.anchor.setTo(0.5, 0.5);
 
@@ -148,13 +164,15 @@ function update() {
 			player.animations.play('walk');
 		else
 			player.animations.play('jump');
-		player.body.moveLeft(100);
+		legs.body.moveLeft(constants.speed);
+		player.body.moveLeft(constants.speed);
 		player.scale.x = -1;
     }
     else if (cursors.right.isDown)
     {
         //  Move to the right
-        player.body.moveRight(100);
+        legs.body.moveRight(constants.speed);
+		player.body.moveRight(constants.speed);
 		player.scale.x = 1;
 		if (checkIfCanJump() || player.data.water)
 			player.animations.play('walk');
@@ -173,17 +191,18 @@ function update() {
 	if (player.data.water) {
 		player.body.fixedRotation = false;
 		if (cursors.up.isDown)
-			player.body.moveUp(200);
+			player.body.moveUp(constants.swim);
 		else if (cursors.down.isDown)
-			player.body.moveDown(150);
+			player.body.moveDown(constants.swim);
 	}
     else {
 		if (cursors.up.isDown && checkIfCanJump()) {
-			player.body.moveUp(350);
+			legs.body.moveUp(constants.jump);
+			player.body.moveUp(constants.jump);
 			player.animations.play('jump');
 		}
-		player.body.data.angle = 0
-		player.body.setZeroRotation();
+		//player.body.data.angle = 0
+		//player.body.setZeroRotation();
 		//player.body.fixedRotation = true;
 	}
 
@@ -205,6 +224,7 @@ function render () {
 	
             game.debug.body(player);
             game.debug.bodyInfo(player, 32, 32);
+			game.debug.body(legs);
 	
 }
 
@@ -218,11 +238,11 @@ function checkIfCanJump() {
     {
         c = game.physics.p2.world.narrowphase.contactEquations[i];
 
-        if (c.bodyA === player.body.data || c.bodyB === player.body.data)
+        if (c.bodyA === legs.body.data || c.bodyB === legs.body.data)
         {
             d = p2.vec2.dot(c.normalA, yAxis);
 
-            if (c.bodyA === player.body.data)
+            if (c.bodyA === legs.body.data)
             {
                 d *= -1;
             }
