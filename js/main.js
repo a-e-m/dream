@@ -34,7 +34,7 @@ function create() {
 
     map.addTilesetImage('Basic', 'tiles');
 
-    map.setCollisionBetween(9, 32);
+    map.setCollisionBetween(48, 120);
 
     layer = map.createLayer('Tile Layer 1');
 
