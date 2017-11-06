@@ -6,25 +6,45 @@ function preload() {
     game.load.image('ground', './img/platform.png');
     game.load.image('star', './img/star.png');
 	game.load.image('water', './img/water.png');
+	game.load.image('textbox', './img/textbox.png');
 
     game.load.spritesheet('dude', './img/bennett.png', 110, 184);
 	
 	game.load.tilemap('map', './img/level.json', null, Phaser.Tilemap.TILED_JSON);
 
     game.load.image('tiles', './img/tiles.png');
+
+    game.load.json('lang', './lang/en-US.json');
 }
 
 var player;
 var platforms;
 var cursors;
 
+var textbox;
+var textboxText;
+var textKey = "intro";
+var textIndex = 0;
+var textboxContinue;
+
 var stars;
 var score = 0;
 var scoreText;
 var constants = {speed: 300, jump: 300, mass: 30, swimSpeed: 140, dive: 100};
 
+var lang;
+
 function create() {
 	game.debug.dirty = true;
+	lang = game.cache.getJSON('lang');
+	textbox = game.add.image(game.camera.width / 2, game.camera.height - 10, 'textbox');
+	textbox.fixedToCamera = true;
+	textbox.anchor.setTo(0.5, 1);
+	textboxText = game.add.text();
+	textboxContinue = game.add.text(0, 0, "Enter >>");
+	textboxContinue.anchor.setTo(1, 1);
+	textbox.addChild(textboxText);
+	textbox.addChild(textboxContinue);
 	game.add.tileSprite(0, 0, 4000, 800, 'sky');
 		var waterLevel = 300;
 
@@ -141,7 +161,11 @@ function create() {
     //scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
 
     //  Our controls.
-    cursors = game.input.keyboard.createCursorKeys();
+    cursors = game.input.keyboard.addKeys({ 'up': Phaser.KeyCode.UP,
+    	'down': Phaser.KeyCode.DOWN,
+    	'left': Phaser.KeyCode.LEFT,
+    	'right': Phaser.KeyCode.RIGHT,
+    	'enter': Phaser.KeyCode.ENTER });
 	game.camera.follow(player);
     
 }
@@ -156,6 +180,36 @@ function update() {
     //game.physics.arcade.overlap(player, stars, collectStar, null, this);
 
     //  Reset the players velocity (movement)
+    if (textKey != null)
+    {
+    	game.physics.p2.pause();
+    	if (cursors.enter.justDown)
+    	{
+    		textIndex++;
+    	}
+    	if (textIndex < lang[textKey].length)
+    	{
+    		textboxText.x = -textbox.width / 2 + 16;
+    		textboxText.y = -textbox.height + 16;
+    		textboxText.text = lang[textKey][textIndex]
+    		textboxContinue.x = textbox.width / 2 - 16;
+    		textboxContinue.y = -16;
+    	}
+    	else
+    	{
+    		textKey = null;
+    		textIndex = 0;
+    	}
+    	textbox.bringToTop();
+    	textbox.visible = true;
+    	return;
+    }
+    else
+    {
+    	textbox.visible = false;
+    	game.physics.p2.resume();
+    }
+
     player.body.velocity.x = 0;
 
 	var speed = player.data.water ? constants.swimSpeed : constants.speed;
