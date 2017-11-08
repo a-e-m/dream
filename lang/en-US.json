@@ -1,7 +1,29 @@
 {
     "intro": [
-        "Test text 1",
-        "Test text 2",
-        "Test text 3\nTest text 4"
-    ]
+        "Every day is the same",
+        "I wake up at home, exactly at 8:15",
+		"I get ready to go.",
+		"I eat a bowl of oatmeal for breakfast.\nThe oatmeal is like my life:\nbeige, bland, and boring.",
+        "And then I take the bus to work"
+    ],
+	"bus": [
+		"The bus is always late.",
+		"It's sprinkling lightly.\nI hope the bus seats won't be damp."
+	],
+	"boss": [
+		"My boss says good morning,\nthen assigns me work for the day",
+		"Recently I've been manually\nentering data into spreadsheets",
+		"I glace out the window,\n toward the small park off to the right.\nDespite working here for 4 years,\n I've never once gone to that park.",
+		"I sigh and get back to my work.\nThe day drags by, but eventually I'm done.",
+		"Time to go home (to the left)"
+	],
+	"water": [
+		"After a long day\nI'm ready to sleep.",
+		"Rain continues falling outside\ngently lulling me to sleep",
+		"I slowly fall into slumber,\n and begin to dream."
+	],
+	"waterAlarm": [
+		"My alarm clock begins to ring\nwaking me from my strange dream.",
+		"Time to go to work"
+	]
 }

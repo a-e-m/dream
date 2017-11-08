@@ -29,6 +29,7 @@ main.day.prototype = {
 		game.load.image('alarm', './img/alarm.png');
 		game.load.image('water', './img/water.png');
 		game.load.image('textbox', './img/textbox.png');
+		game.load.image('placeholder', './img/placeholder.png');
 		game.load.image('house', './img/house.png');
 		game.load.image('boss', './img/boss.png');
 		game.load.image('tree', './img/tree.png');
@@ -55,7 +56,7 @@ main.day.prototype = {
 		textbox.addChild(textboxText);
 		textbox.addChild(textboxContinue);
 		
-		game.add.tileSprite(0, 0, 8000, 1500, 'sky');
+		game.add.tileSprite(0, 0, 12000, 1500, 'sky');
 		var waterLevel = 1500;
 		game.add.tileSprite(0, waterLevel, 1920, 1200, 'water');
 
@@ -84,29 +85,33 @@ main.day.prototype = {
 			console.log(element);
 			var type = element.name;
 			var entity = game.add.sprite(element.x, element.y, type);
-			
-			if (element.properties.physics) {
+			if (element.properties) {
+				if (element.properties.physics) {
 				game.physics.p2.enable(entity);
 				entity.body.mass = element.properties.mass || 1;
 				entity.body.motionState = element.properties.motionState || 1;
+				//entity.body.debug = true;
 				if (element.properties.contact) {
 					entity.body.onBeginContact.add(function(body, bodyB){
+						
 						if (body && body.sprite) {
 							if (body.sprite.key === 'dude') {
 								eval(element.properties.contact);
 								element.properties.contact = '';
 							}
 						}}, that);
+					}
+				}
+				
+				if (element.properties.setup) {
+					eval(element.properties.setup);
+				}
+				
+				if (element.properties.update) {
+					entity.data.update = element.properties.update;
 				}
 			}
 			
-			if (element.properties.setup) {
-				eval(element.properties.setup);
-			}
-			
-			if (element.properties.update) {
-				entity.data.update = element.properties.update;
-			}
 
 			entities.add(entity);
 		}, this); 
@@ -148,7 +153,7 @@ main.day.prototype = {
 
 		//  Finally some stars to collect
 		alarms = game.add.group();
-		for (var i = 0; i < 1; i++)
+		for (var i = 0; i < 0; i++)
 		{
 			var alarm = alarms.create(900 + i * 100, 300, 'alarm');
 			game.physics.p2.enable(alarm);
@@ -162,7 +167,7 @@ main.day.prototype = {
 		this.setupBuoyancy(bodies, p2.vec2.fromValues(0, game.physics.p2.pxmi(waterLevel)));
 		
 		//  The this.score
-		this.scoreText = game.add.text(16, 16, 'this.score: 0', { fontSize: '32px', fill: '#000' });
+		this.scoreText = game.add.text(16, 16, '', { fontSize: '32px', fill: '#000' });
 		this.scoreText.fixedToCamera = true;
 		player.body.onBeginContact.add(this.hitObject, this);
 		
@@ -376,6 +381,3 @@ main.day.prototype = {
 		}
 	}
 };
-
-game.state.add('day', main.day);
-game.state.start('day');
