@@ -44,7 +44,7 @@
                  "name":"bus",
                  "properties":
                     {
-                     "contact":"if(!entity.data.touched) {entity.data.touched = true; entity.bringToTop();}",
+                     "contact":"if(!entity.data.touched) {entity.data.touched = true;}",
                      "mass":1000,
                      "physics":true,
                      "setup":"entity.body.clearShapes();\nentity.body.addRectangle(400, 30, 0, 90, 0);\nentity.body.addRectangle(50, 30, -200, 30, 0);\nentity.body.addRectangle(50, 30, 200, 30, 0);",

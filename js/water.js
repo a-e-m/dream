@@ -28,7 +28,7 @@ main.water.prototype = {
 		game.load.image('house', './img/house.png');
 		game.load.image('boss', './img/boss.png');
 		game.load.image('tree', './img/tree.png');
-		game.load.image('bus', './img/bus.png');
+		game.load.image('bus', './img/sub.png');
 		game.load.image('chair', './img/chair.png');
 		game.load.audio('music', ['img/dream_fast.wav']);
 
@@ -38,7 +38,7 @@ main.water.prototype = {
 		
 		game.load.tilemap('map', './img/water2.json', null, Phaser.Tilemap.TILED_JSON);
 
-		game.load.image('tiles', './img/tiles.png');
+		game.load.image('tiles', './img/oceantiles.png');
 
 		game.load.json('lang', './lang/en-US.json');
 	},
