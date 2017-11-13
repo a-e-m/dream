@@ -5,7 +5,6 @@ main.water = function(game) {
 
 	this.textbox;
 	this.textboxText;
-	this.textKey = "water";//"intro";
 	this.textIndex = 0;
 	this.textboxContinue;
 
@@ -25,21 +24,29 @@ main.water.prototype = {
 		game.load.image('alarm', './img/alarm.png');
 		game.load.image('water', './img/water.png');
 		game.load.image('textbox', './img/textbox.png');
+		game.load.image('placeholder', './img/placeholder.png');
 		game.load.image('house', './img/house.png');
 		game.load.image('boss', './img/boss.png');
 		game.load.image('tree', './img/tree.png');
 		game.load.image('bus', './img/bus.png');
+		game.load.image('chair', './img/chair.png');
+		game.load.audio('music', ['img/dream_fast.wav']);
+
 		this.objects = {'house': 1, 'tree': 2, 'bus': 3};
 
 		game.load.spritesheet('dude', './img/swim.png', 297, 132);
 		
-		game.load.tilemap('map', './img/water.json', null, Phaser.Tilemap.TILED_JSON);
+		game.load.tilemap('map', './img/water2.json', null, Phaser.Tilemap.TILED_JSON);
 
 		game.load.image('tiles', './img/tiles.png');
 
 		game.load.json('lang', './lang/en-US.json');
 	},
 	create: function() {
+		if (main.music) main.music.destroy();
+		main.music = game.add.audio('music', 0.8, true);
+		main.music.play();
+		
 		game.debug.dirty = true;
 		lang = game.cache.getJSON('lang');
 		textbox = game.add.image(game.camera.width / 2, game.camera.height - 10, 'textbox');
@@ -110,8 +117,8 @@ main.water.prototype = {
 		player = game.add.sprite(250, 550, 'dude', 0, entities);
 		game.physics.p2.enable(player);
 		player.body.clearShapes();
-		player.body.addRectangle(40, 145, 0, 0, 0);
-		player.body.addRectangle(70, 20, 0, 60, 0);
+		player.body.addRectangle(140, 60, 0, 0, 0);
+		//player.body.addRectangle(70, 20, 0, 60, 0);
 		player.body.mass = this.constants.mass;
 		player.body.fixedRotation = true;
 		player.body.damping = 0.3;
@@ -153,7 +160,7 @@ main.water.prototype = {
 		
 		// Create "water surface"
 		var waterLevel = 300;
-		game.add.tileSprite(0, waterLevel, 15020, 3000, 'water');
+		game.add.tileSprite(0, waterLevel - 80, 15020, 3000, 'water');
 		console.log(waterLevel);
 		var bodies = _.map(alarms.children, function(s) {return s.body.data;});
 		bodies.push(player.body.data);
@@ -173,24 +180,24 @@ main.water.prototype = {
 		game.camera.follow(player);
 	},
 	update: function() {
-		if (this.textKey != null)
+		if (main.textKey != null)
 		{
 			game.physics.p2.pause();
 			if (cursors.enter.justDown)
 			{
 				this.textIndex++;
 			}
-			if (this.textIndex < lang[this.textKey].length)
+			if (this.textIndex < lang[main.textKey].length)
 			{
 				textboxText.x = -textbox.width / 2 + 16;
 				textboxText.y = -textbox.height + 16;
-				textboxText.text = lang[this.textKey][this.textIndex]
+				textboxText.text = lang[main.textKey][this.textIndex]
 				textboxContinue.x = textbox.width / 2 - 16;
 				textboxContinue.y = -16;
 			}
 			else
 			{
-				this.textKey = null;
+				main.textKey = null;
 				this.textIndex = 0;
 			}
 			textbox.bringToTop();

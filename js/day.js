@@ -1,6 +1,8 @@
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '');
 
-var main = {};
+var main = {
+	textKey: "intro"
+};
 
 main.day = function(game) {
 	this.player;
@@ -9,7 +11,6 @@ main.day = function(game) {
 
 	this.textbox;
 	this.textboxText;
-	this.textKey = "intro";
 	this.textIndex = 0;
 	this.textboxContinue;
 
@@ -34,6 +35,9 @@ main.day.prototype = {
 		game.load.image('boss', './img/boss.png');
 		game.load.image('tree', './img/tree.png');
 		game.load.image('bus', './img/bus.png');
+		game.load.image('chair', './img/chair.png');
+		game.load.audio('music', ['img/day.wav']);
+
 		this.objects = {'house': 1, 'tree': 2, 'bus': 3};
 
 		game.load.spritesheet('dude', './img/bennett.png', 110, 184);
@@ -45,6 +49,10 @@ main.day.prototype = {
 		game.load.json('lang', './lang/en-US.json');
 	},
 	create: function() {
+		if (main.music) main.music.destroy();
+		main.music = game.add.audio('music', 0.8, true);
+		main.music.play();
+		
 		game.debug.dirty = true;
 		lang = game.cache.getJSON('lang');
 		textbox = game.add.image(game.camera.width / 2, game.camera.height - 10, 'textbox');
@@ -80,11 +88,12 @@ main.day.prototype = {
 		game.physics.p2.convertTilemap(map, layer);
 		
 		var entities = this.entities = game.add.group();
+		var objects = {};
 		var that = this;
 		map.objects['Object Layer 1'].forEach(function(element) {
-			console.log(element);
 			var type = element.name;
 			var entity = game.add.sprite(element.x, element.y, type);
+			objects[type] = entity;
 			if (element.properties) {
 				if (element.properties.physics) {
 				game.physics.p2.enable(entity);
@@ -97,7 +106,7 @@ main.day.prototype = {
 						if (body && body.sprite) {
 							if (body.sprite.key === 'dude') {
 								eval(element.properties.contact);
-								element.properties.contact = '';
+								//element.properties.contact = '';
 							}
 						}}, that);
 					}
@@ -180,24 +189,24 @@ main.day.prototype = {
 		game.camera.follow(player);
 	},
 	update: function() {
-		if (this.textKey != null)
+		if (main.textKey != null)
 		{
 			game.physics.p2.pause();
 			if (cursors.enter.justDown)
 			{
 				this.textIndex++;
 			}
-			if (this.textIndex < lang[this.textKey].length)
+			if (this.textIndex < lang[main.textKey].length)
 			{
 				textboxText.x = -textbox.width / 2 + 16;
 				textboxText.y = -textbox.height + 16;
-				textboxText.text = lang[this.textKey][this.textIndex]
+				textboxText.text = lang[main.textKey][this.textIndex]
 				textboxContinue.x = textbox.width / 2 - 16;
 				textboxContinue.y = -16;
 			}
 			else
 			{
-				this.textKey = null;
+				main.textKey = null;
 				this.textIndex = 0;
 			}
 			textbox.bringToTop();

@@ -44,11 +44,11 @@
                  "name":"bus",
                  "properties":
                     {
-                     "contact":"if(!entity.data.touched) {entity.data.touched = true;main.textKey = 'bus'; entity.bringToTop();}",
+                     "contact":"if(!entity.data.touched) {entity.data.touched = true; entity.bringToTop();}",
                      "mass":1000,
                      "physics":true,
                      "setup":"entity.body.clearShapes();\nentity.body.addRectangle(400, 30, 0, 90, 0);\nentity.body.addRectangle(50, 30, -200, 30, 0);\nentity.body.addRectangle(50, 30, 200, 30, 0);",
-                     "update":"\nif (player.data.worked && entity.data.touched && entity.body.x > 4000)  entity.body.moveLeft(170);\nelse if (!player.data.worked && entity.data.touched && entity.body.x < 6000) entity.body.moveRight(170);\nelse entity.body.velocity.x = 0;"
+                     "update":""
                     },
                  "propertytypes":
                     {
@@ -79,10 +79,10 @@
                 {
                  "height":148,
                  "id":45,
-                 "name":"boss",
+                 "name":"alarm",
                  "properties":
                     {
-                     "contact":"if(!entity.data.touched) {entity.data.touched = true;\nmain.textKey = \"boss\"; player.data.worked = true; objects.bus.data.touched = false; objects.bus.scale.x = -1;}",
+                     "contact":"main.textKey = \"waterAlarm\"; game.state.start(\"day\");",
                      "mass":50,
                      "physics":true
                     },
@@ -96,39 +96,16 @@
                  "type":"",
                  "visible":true,
                  "width":98,
-                 "x":7000,
-                 "y":548
+                 "x":7600,
+                 "y":608
                 }, 
                 {
-                 "height":80,
-                 "id":46,
-                 "name":"placeholder",
-                 "properties":
-                    {
-                     "contact":"if (player.data.worked) {main.textKey = \"water\"; game.state.start(\"water\"); console.log(player.data);}",
-                     "motionState":4,
-                     "physics":true
-                    },
-                 "propertytypes":
-                    {
-                     "contact":"string",
-                     "motionState":"int",
-                     "physics":"bool"
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":158,
-                 "x":120,
-                 "y":562
-                }, 
-                {
-                 "height":90,
-                 "id":48,
+                 "height":0,
+                 "id":50,
                  "name":"chair",
                  "properties":
                     {
-                     "mass":5,
+                     "mass":10,
                      "physics":true
                     },
                  "propertytypes":
@@ -139,9 +116,9 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":60,
-                 "x":948,
-                 "y":810
+                 "width":0,
+                 "x":1114,
+                 "y":898
                 }],
          "offsetx":-10,
          "offsety":-12,

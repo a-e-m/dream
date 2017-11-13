@@ -14,7 +14,10 @@
 		"My boss says good morning,\nthen assigns me work for the day",
 		"Recently I've been manually\nentering data into spreadsheets",
 		"I glace out the window,\n toward the small park off to the right.\nDespite working here for 4 years,\n I've never once gone to that park.",
-		"I sigh and get back to my work.\nThe day drags by, but eventually I'm done.",
+		"I sigh and get back to my work.\nThe day drags by...",
+		"...",
+		"...",
+		"but eventually I'm done.",
 		"Time to go home (to the left)"
 	],
 	"water": [
