@@ -3,4 +3,3 @@ music too repetitive
 	silence
 	music silence music silence
 	extend current music
-bus -> submarine, etc.
