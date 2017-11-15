@@ -1,7 +1,8 @@
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '');
 
 var main = {
-	textKey: "intro"
+	textKey: "intro",
+	level: 0
 };
 
 main.day = function(game) {
@@ -36,14 +37,21 @@ main.day.prototype = {
 		game.load.image('tree', './img/tree.png');
 		game.load.image('bus', './img/bus.png');
 		game.load.image('chair', './img/chair.png');
-		game.load.audio('music', ['img/day.wav']);
+		//game.load.audio('music', ['img/day.wav']);
 
 		this.objects = {'house': 1, 'tree': 2, 'bus': 3};
 
 		game.load.spritesheet('dude', './img/bennett.png', 110, 184);
 		
-		game.load.tilemap('map', './img/day2.json', null, Phaser.Tilemap.TILED_JSON);
-
+		if (main.level === 0) {
+			game.load.tilemap('map', './img/day2.json', null, Phaser.Tilemap.TILED_JSON);
+		} else if (main.level === 1) {
+			game.load.tilemap('map', './img/nextday.json', null, Phaser.Tilemap.TILED_JSON);
+			main.textKey = "waterAlarm";
+		} else if (main.level === 2) {
+			
+		}
+		
 		game.load.image('tiles', './img/tiles.png');
 
 		game.load.json('lang', './lang/en-US.json');
@@ -155,9 +163,10 @@ main.day.prototype = {
 		game.physics.p2.createContactMaterial(boxMaterial, boxMaterial, { friction: 0.2 });
 
 		//  Our two animations, walking left and right.
-		player.animations.add('walk', null, 32, true);
-		player.animations.add('swim', null, 16, true);
+		player.animations.add('walk', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], 32, true);
+		player.animations.add('swim', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], 16, true);
 		player.animations.add('jump', [2], 15, true);
+		player.animations.add('sit', [22], 15, true);
 		player.anchor.setTo(0.5, 0.5);
 
 		//  Finally some stars to collect
@@ -255,7 +264,8 @@ main.day.prototype = {
 		else
 		{
 			//  Stand still
-			player.animations.stop();
+			if (player.animations.currentAnim.name !== 'sit')
+				player.animations.stop();
 		}
 
 		//  Allow the player to jump if they are touching the ground.

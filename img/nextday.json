@@ -44,11 +44,11 @@
                  "name":"bus",
                  "properties":
                     {
-                     "contact":"if(!entity.data.touched) {entity.data.touched = true;}",
+                     "contact":"if(!entity.data.touched) {entity.data.touched = true;player.animations.stop();main.textKey = 'bus2'; entity.bringToTop();player.animations.play('sit');}",
                      "mass":1000,
                      "physics":true,
-                     "setup":"entity.body.clearShapes();\nentity.body.addRectangle(400, 30, 0, 90, 0);\nentity.body.addRectangle(50, 30, -200, 30, 0);\nentity.body.addRectangle(50, 30, 200, 30, 0);",
-                     "update":""
+                     "setup":"entity.body.clearShapes();\nentity.body.addRectangle(400, 10, 0, 90, 0);\nentity.body.addRectangle(20, 70, -200, 50, 0);\nentity.body.addRectangle(20, 70, 200, 50, 0);",
+                     "update":"\nif (player.data.worked && entity.data.touched && entity.body.x > 4000)  entity.body.moveLeft(170);\nelse if (!player.data.worked && entity.data.touched && entity.body.x < 6000) entity.body.moveRight(170);\nelse entity.body.velocity.x = 0;"
                     },
                  "propertytypes":
                     {
@@ -79,10 +79,10 @@
                 {
                  "height":148,
                  "id":45,
-                 "name":"alarm",
+                 "name":"boss",
                  "properties":
                     {
-                     "contact":"main.textKey = \"waterAlarm\"; main.level = 1; game.state.start(\"day\");",
+                     "contact":"if(!entity.data.touched) {entity.data.touched = true;player.animations.play('sit');\nmain.textKey = \"boss2\"; player.data.worked = true; objects.bus.data.touched = false; objects.bus.scale.x = -1;}",
                      "mass":50,
                      "physics":true
                     },
@@ -96,16 +96,39 @@
                  "type":"",
                  "visible":true,
                  "width":98,
-                 "x":7600,
-                 "y":608
+                 "x":6921,
+                 "y":569
                 }, 
                 {
-                 "height":0,
-                 "id":50,
+                 "height":80,
+                 "id":46,
+                 "name":"placeholder",
+                 "properties":
+                    {
+                     "contact":"if (player.data.worked) {main.textKey = \"lava\"; game.state.start(\"lava\"); console.log(player.data);}",
+                     "motionState":4,
+                     "physics":true
+                    },
+                 "propertytypes":
+                    {
+                     "contact":"string",
+                     "motionState":"int",
+                     "physics":"bool"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":158,
+                 "x":120,
+                 "y":562
+                }, 
+                {
+                 "height":90,
+                 "id":48,
                  "name":"chair",
                  "properties":
                     {
-                     "mass":10,
+                     "mass":5,
                      "physics":true
                     },
                  "propertytypes":
@@ -116,9 +139,9 @@
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":0,
-                 "x":1114,
-                 "y":898
+                 "width":60,
+                 "x":948,
+                 "y":810
                 }],
          "offsetx":-10,
          "offsety":-12,

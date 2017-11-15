@@ -4,7 +4,8 @@ from PIL import Image
 
 images = []
 for file in glob.glob('*.png'):
-	if file.startswith('Bennett-Walking-Day'):
+	if file.startswith('Bennett-Walking-Day') or file.startswith('sitting'):
+	#if file.startswith('lava'):
 		img = Image.open(file)
 		images.append(img)
 

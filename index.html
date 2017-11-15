@@ -31,8 +31,12 @@
 		<script src="js/vendor/lodash.core.js"></script>
 		<script src="js/day.js"></script>
 		<script src="js/water.js"></script>
-		<script>game.state.add('day', main.day);
-		game.state.add('water', main.water);
-				game.state.start('day');</script>
+		<script src="js/lava.js"></script>
+		<script>
+			game.state.add('day', main.day);
+			game.state.add('water', main.water);
+			game.state.add('lava', main.lava);
+			game.state.start('day');
+		</script>
     </body>
 </html>

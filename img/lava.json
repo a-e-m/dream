@@ -22,14 +22,12 @@
                  "properties":
                     {
                      "mass":0.1,
-                     "physics":false,
-                     "type":"hous"
+                     "physics":false
                     },
                  "propertytypes":
                     {
                      "mass":"float",
-                     "physics":"bool",
-                     "type":"string"
+                     "physics":"bool"
                     },
                  "rotation":0,
                  "type":"",
@@ -47,8 +45,8 @@
                      "contact":"if(!entity.data.touched) {entity.data.touched = true;}",
                      "mass":1000,
                      "physics":true,
-                     "setup":"entity.body.clearShapes();\nentity.body.addRectangle(400, 30, 0, 90, 0);\nentity.body.addRectangle(50, 30, -200, 30, 0);\nentity.body.addRectangle(50, 30, 200, 30, 0);",
-                     "update":""
+                     "setup":"",
+                     "update":"if (player.data.worked && entity.data.touched && entity.body.x > 4000)  entity.body.moveLeft(170);\nelse if (!player.data.worked && entity.data.touched && entity.body.x < 6000) entity.body.moveRight(170);\nelse entity.body.velocity.x = 0;"
                     },
                  "propertytypes":
                     {
@@ -82,7 +80,7 @@
                  "name":"alarm",
                  "properties":
                     {
-                     "contact":"main.textKey = \"waterAlarm\"; main.level = 1; game.state.start(\"day\");",
+                     "contact":"main.textKey = \"waterAlarm\"; main.day = 1; game.state.start(\"day\");",
                      "mass":50,
                      "physics":true
                     },
@@ -96,8 +94,8 @@
                  "type":"",
                  "visible":true,
                  "width":98,
-                 "x":7600,
-                 "y":608
+                 "x":6925,
+                 "y":565
                 }, 
                 {
                  "height":0,

@@ -28,5 +28,26 @@
 	"waterAlarm": [
 		"My alarm clock begins to ring\nwaking me from my strange dream.",
 		"Time to go to work"
+	],
+	"bus2": [
+		"As I get on the bus,\nI notice a woman and\n her child sitting in front of me",
+		"The child appears\n to be talking to an\n imaginary friend named Barth",
+		"It reminds me of how imaginative\n I used to be as a child.\nOne of my favorite games involved\npretending that the floor had turned into lava",
+		"Of course,\nif you touched the floor,\nyou would 'die'",
+		"But now, my life is so mundane and dull.\nI can't think of the last time\nI imagined anything."
+	],
+	"boss2": [
+		"My boss says good morning,\nthen assigns me work for the day",
+		"Once again, I'm manually\nentering data into spreadsheets",
+		"For a moment, I think of the\ninnocence of my childhood.\nBut of course, nothing innocent can ever last.",
+		"I sigh and get back to my work.\nThe day drags by...",
+		"...",
+		"...",
+		"but eventually I'm done.",
+		"Time to go home (to the left)"
+	],
+	"lava": [
+		"Once again, I drift off into dreamland",
+		"As I slip away,\nI think once more about\n the imaginative child I used to be"
 	]
 }
