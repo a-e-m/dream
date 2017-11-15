@@ -2,7 +2,7 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '');
 
 var main = {
 	textKey: "intro",
-	stage: 1
+	stage: 0
 };
 
 main.level = function(game) {
@@ -17,7 +17,7 @@ main.level = function(game) {
 
 	this.score = 0;
 	this.scoreText;
-	this.constants = {speed: 400, jump: 600, mass: 50, swimSpeed: 240, dive: 160};
+	this.constants = {speed: 400, jump: 600, mass: 50, swimSpeed: 300, swimAccel: 10, dive: 160};
 
 	this.lavaLevel = 950;
 
@@ -299,18 +299,26 @@ main.level.prototype = {
 
 		}
 
-		player.body.velocity.x = 0;
-		var speed = player.data.water ? this.constants.swimSpeed : this.constants.speed;
 		var leftTouch = this.checkSide(p2.vec2.fromValues(-1, 0)), 
 			rightTouch = this.checkSide(p2.vec2.fromValues(1, 0)),
 			downTouch = this.checkSide(p2.vec2.fromValues(0, 1));
 		if (leftTouch || rightTouch) {
 			player.body.y += 1;
 		}
-			
+
+		player.body.velocity.x = player.data.water ? 0.98 * player.body.velocity.x : 0;
+		var speed = player.data.water ? this.constants.swimAccel : this.constants.speed;
 		if (this.cursors.left.isDown && !leftTouch)
 		{
-			player.body.moveLeft(speed);
+			//player.body.moveLeft(speed);
+			speed *= -1;
+			if (player.data.water) {
+				speed += player.body.velocity.x;
+				if (speed > this.constants.swimSpeed) {
+					speed = this.constants.swimSpeed;
+				}
+			}
+			player.body.velocity.x = speed;
 			player.scale.x = player.data.water ? 1 : -1;
 			//  Move to the left
 			if (player.data.water)
@@ -323,7 +331,14 @@ main.level.prototype = {
 		else if (this.cursors.right.isDown && !rightTouch)
 		{
 			//  Move to the right
-			player.body.moveRight(speed);
+			//player.body.moveRight(speed);
+			if (player.data.water) {
+				speed += player.body.velocity.x;
+				if (speed < -this.constants.swimSpeed) {
+					speed = -this.constants.swimSpeed;
+				}
+			}
+			player.body.velocity.x = speed;
 			player.scale.x = player.data.water ? -1 : 1;
 			if (player.data.water)
 				player.animations.play('swim');
@@ -338,6 +353,7 @@ main.level.prototype = {
 			if (player.animations.currentAnim.name !== 'sit' || main.stage % 2 == 1)
 				player.animations.stop();
 		}
+		console.log(player.body.velocity.x);
 
 		//  Allow the player to jump if they are touching the ground.
 		if (player.data.water) {
