@@ -2,7 +2,7 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '');
 
 var main = {
 	textKey: "intro",
-	stage: 1
+	stage: 3
 };
 
 main.level = function(game) {
@@ -17,7 +17,7 @@ main.level = function(game) {
 
 	this.score = 0;
 	this.scoreText;
-	this.constants = {speed: 400, jump: 600, mass: 50, swimSpeed: 240, dive: 160};
+	this.constants = {speed: 300, jump: 300, mass: 50, swimSpeed: 140, dive: 100};
 
 	this.lavaLevel = 950;
 
@@ -123,7 +123,7 @@ main.level.prototype = {
 		layer.resizeWorld();
 
 		game.physics.startSystem(Phaser.Physics.P2JS);
-		game.physics.p2.gravity.y = 1200;
+		game.physics.p2.gravity.y = 300;
 		game.physics.p2.world.defaultContactMaterial.friction = 0.2;
 		game.physics.p2.restitution = 0.2;
 		//game.physics.p2.world.setGlobalRelaxation(1);
@@ -415,7 +415,7 @@ main.level.prototype = {
 		var liftForce = [0,0];
 		var viscousForce = [0,0];
 		var shapeAngle = 0;
-		k = 14; // up force per submerged "volume"
+		k = 7; // up force per submerged "volume"
 		c = 50; // viscosity
 		var v = [0,0];
 		var aabb = new p2.AABB();
