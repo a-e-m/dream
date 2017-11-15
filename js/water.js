@@ -1,15 +1,10 @@
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '');
-
-var main = {};
-
-main.day = function(game) {
+main.water = function(game) {
 	this.player;
 	this.platforms;
 	this.cursors;
 
 	this.textbox;
 	this.textboxText;
-	this.textKey = "intro";
 	this.textIndex = 0;
 	this.textboxContinue;
 
@@ -22,28 +17,36 @@ main.day = function(game) {
 	this.lang;
 }
 
-main.day.prototype = {
+main.water.prototype = {
 	preload: function() {
 		game.load.image('sky', './img/cityscape.png');
 		game.load.image('ground', './img/platform.png');
 		game.load.image('alarm', './img/alarm.png');
 		game.load.image('water', './img/water.png');
 		game.load.image('textbox', './img/textbox.png');
+		game.load.image('placeholder', './img/placeholder.png');
 		game.load.image('house', './img/house.png');
 		game.load.image('boss', './img/boss.png');
 		game.load.image('tree', './img/tree.png');
-		game.load.image('bus', './img/bus.png');
+		game.load.image('bus', './img/sub.png');
+		game.load.image('chair', './img/chair.png');
+		//game.load.audio('music', ['img/dream_fast.wav']);
+
 		this.objects = {'house': 1, 'tree': 2, 'bus': 3};
 
-		game.load.spritesheet('dude', './img/bennett.png', 110, 184);
+		game.load.spritesheet('dude', './img/swim.png', 297, 132);
 		
-		game.load.tilemap('map', './img/day2.json', null, Phaser.Tilemap.TILED_JSON);
+		game.load.tilemap('map', './img/water2.json', null, Phaser.Tilemap.TILED_JSON);
 
-		game.load.image('tiles', './img/tiles.png');
+		game.load.image('tiles', './img/oceantiles.png');
 
 		game.load.json('lang', './lang/en-US.json');
 	},
 	create: function() {
+		if (main.music) main.music.destroy();
+		main.music = game.add.audio('music', 0.8, true);
+		main.music.play();
+		
 		game.debug.dirty = true;
 		lang = game.cache.getJSON('lang');
 		textbox = game.add.image(game.camera.width / 2, game.camera.height - 10, 'textbox');
@@ -55,10 +58,7 @@ main.day.prototype = {
 		textbox.addChild(textboxText);
 		textbox.addChild(textboxContinue);
 		
-		game.add.tileSprite(0, 0, 8000, 1500, 'sky');
-		var waterLevel = 1500;
-		game.add.tileSprite(0, waterLevel, 1920, 1200, 'water');
-
+		game.add.tileSprite(0, 0, 12000, 1500, 'sky');
 		
 		map = game.add.tilemap('map');
 
@@ -84,8 +84,8 @@ main.day.prototype = {
 			console.log(element);
 			var type = element.name;
 			var entity = game.add.sprite(element.x, element.y, type);
-			
-			if (element.properties.physics) {
+			if (element.properties) {
+				if (element.properties.physics) {
 				game.physics.p2.enable(entity);
 				entity.body.mass = element.properties.mass || 1;
 				entity.body.motionState = element.properties.motionState || 1;
@@ -97,16 +97,18 @@ main.day.prototype = {
 								element.properties.contact = '';
 							}
 						}}, that);
+					}
+				}
+				
+				if (element.properties.setup) {
+					eval(element.properties.setup);
+				}
+				
+				if (element.properties.update) {
+					entity.data.update = element.properties.update;
 				}
 			}
 			
-			if (element.properties.setup) {
-				eval(element.properties.setup);
-			}
-			
-			if (element.properties.update) {
-				entity.data.update = element.properties.update;
-			}
 
 			entities.add(entity);
 		}, this); 
@@ -115,8 +117,8 @@ main.day.prototype = {
 		player = game.add.sprite(250, 550, 'dude', 0, entities);
 		game.physics.p2.enable(player);
 		player.body.clearShapes();
-		player.body.addRectangle(40, 145, 0, 0, 0);
-		player.body.addRectangle(70, 20, 0, 60, 0);
+		player.body.addRectangle(140, 60, 0, 0, 0);
+		//player.body.addRectangle(70, 20, 0, 60, 0);
 		player.body.mass = this.constants.mass;
 		player.body.fixedRotation = true;
 		player.body.damping = 0.3;
@@ -148,7 +150,7 @@ main.day.prototype = {
 
 		//  Finally some stars to collect
 		alarms = game.add.group();
-		for (var i = 0; i < 1; i++)
+		for (var i = 0; i < 0; i++)
 		{
 			var alarm = alarms.create(900 + i * 100, 300, 'alarm');
 			game.physics.p2.enable(alarm);
@@ -157,12 +159,15 @@ main.day.prototype = {
 		}
 		
 		// Create "water surface"
+		var waterLevel = 300;
+		game.add.tileSprite(0, waterLevel - 80, 15020, 3000, 'water');
+		console.log(waterLevel);
 		var bodies = _.map(alarms.children, function(s) {return s.body.data;});
 		bodies.push(player.body.data);
 		this.setupBuoyancy(bodies, p2.vec2.fromValues(0, game.physics.p2.pxmi(waterLevel)));
 		
 		//  The this.score
-		this.scoreText = game.add.text(16, 16, 'this.score: 0', { fontSize: '32px', fill: '#000' });
+		this.scoreText = game.add.text(16, 16, '', { fontSize: '32px', fill: '#000' });
 		this.scoreText.fixedToCamera = true;
 		player.body.onBeginContact.add(this.hitObject, this);
 		
@@ -175,24 +180,24 @@ main.day.prototype = {
 		game.camera.follow(player);
 	},
 	update: function() {
-		if (this.textKey != null)
+		if (main.textKey != null)
 		{
 			game.physics.p2.pause();
 			if (cursors.enter.justDown)
 			{
 				this.textIndex++;
 			}
-			if (this.textIndex < lang[this.textKey].length)
+			if (this.textIndex < lang[main.textKey].length)
 			{
 				textboxText.x = -textbox.width / 2 + 16;
 				textboxText.y = -textbox.height + 16;
-				textboxText.text = lang[this.textKey][this.textIndex]
+				textboxText.text = lang[main.textKey][this.textIndex]
 				textboxContinue.x = textbox.width / 2 - 16;
 				textboxContinue.y = -16;
 			}
 			else
 			{
-				this.textKey = null;
+				main.textKey = null;
 				this.textIndex = 0;
 			}
 			textbox.bringToTop();
@@ -206,7 +211,7 @@ main.day.prototype = {
 		}
 
 		player.body.velocity.x = 0;
-		var speed = player.data.water ? this.constants.swimSpeed : this.constants.speed;
+		var speed = this.constants.swimSpeed;
 		var leftTouch = this.checkSide(p2.vec2.fromValues(-1, 0)), 
 			rightTouch = this.checkSide(p2.vec2.fromValues(1, 0)),
 			downTouch = this.checkSide(p2.vec2.fromValues(0, 1));
@@ -217,7 +222,7 @@ main.day.prototype = {
 		if (cursors.left.isDown && !leftTouch)
 		{
 			player.body.moveLeft(speed);
-			player.scale.x = -1;
+			player.scale.x = 1;
 			//  Move to the left
 			if (player.data.water)
 				player.animations.play('swim');
@@ -230,7 +235,7 @@ main.day.prototype = {
 		{
 			//  Move to the right
 			player.body.moveRight(speed);
-			player.scale.x = 1;
+			player.scale.x = -1;
 			if (player.data.water)
 				player.animations.play('swim');
 			else if (this.checkSide(p2.vec2.fromValues(0, 1)))
@@ -246,7 +251,7 @@ main.day.prototype = {
 
 		//  Allow the player to jump if they are touching the ground.
 		if (player.data.water) {
-			player.body.fixedRotation = false;
+			//player.body.fixedRotation = false;
 			if (cursors.up.isDown) {
 				player.body.moveUp(this.constants.dive);
 			}
@@ -376,6 +381,3 @@ main.day.prototype = {
 		}
 	}
 };
-
-game.state.add('day', main.day);
-game.state.start('day');

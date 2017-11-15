@@ -1,6 +1,9 @@
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '');
 
-var main = {};
+var main = {
+	textKey: "intro",
+	level: 0
+};
 
 main.day = function(game) {
 	this.player;
@@ -9,7 +12,6 @@ main.day = function(game) {
 
 	this.textbox;
 	this.textboxText;
-	this.textKey = "intro";
 	this.textIndex = 0;
 	this.textboxContinue;
 
@@ -29,21 +31,36 @@ main.day.prototype = {
 		game.load.image('alarm', './img/alarm.png');
 		game.load.image('water', './img/water.png');
 		game.load.image('textbox', './img/textbox.png');
+		game.load.image('placeholder', './img/placeholder.png');
 		game.load.image('house', './img/house.png');
 		game.load.image('boss', './img/boss.png');
 		game.load.image('tree', './img/tree.png');
 		game.load.image('bus', './img/bus.png');
+		game.load.image('chair', './img/chair.png');
+		//game.load.audio('music', ['img/day.wav']);
+
 		this.objects = {'house': 1, 'tree': 2, 'bus': 3};
 
 		game.load.spritesheet('dude', './img/bennett.png', 110, 184);
 		
-		game.load.tilemap('map', './img/day2.json', null, Phaser.Tilemap.TILED_JSON);
-
+		if (main.level === 0) {
+			game.load.tilemap('map', './img/day2.json', null, Phaser.Tilemap.TILED_JSON);
+		} else if (main.level === 1) {
+			game.load.tilemap('map', './img/nextday.json', null, Phaser.Tilemap.TILED_JSON);
+			main.textKey = "waterAlarm";
+		} else if (main.level === 2) {
+			
+		}
+		
 		game.load.image('tiles', './img/tiles.png');
 
 		game.load.json('lang', './lang/en-US.json');
 	},
 	create: function() {
+		if (main.music) main.music.destroy();
+		main.music = game.add.audio('music', 0.8, true);
+		main.music.play();
+		
 		game.debug.dirty = true;
 		lang = game.cache.getJSON('lang');
 		textbox = game.add.image(game.camera.width / 2, game.camera.height - 10, 'textbox');
@@ -55,7 +72,7 @@ main.day.prototype = {
 		textbox.addChild(textboxText);
 		textbox.addChild(textboxContinue);
 		
-		game.add.tileSprite(0, 0, 8000, 1500, 'sky');
+		game.add.tileSprite(0, 0, 12000, 1500, 'sky');
 		var waterLevel = 1500;
 		game.add.tileSprite(0, waterLevel, 1920, 1200, 'water');
 
@@ -79,34 +96,39 @@ main.day.prototype = {
 		game.physics.p2.convertTilemap(map, layer);
 		
 		var entities = this.entities = game.add.group();
+		var objects = {};
 		var that = this;
 		map.objects['Object Layer 1'].forEach(function(element) {
-			console.log(element);
 			var type = element.name;
 			var entity = game.add.sprite(element.x, element.y, type);
-			
-			if (element.properties.physics) {
+			objects[type] = entity;
+			if (element.properties) {
+				if (element.properties.physics) {
 				game.physics.p2.enable(entity);
 				entity.body.mass = element.properties.mass || 1;
 				entity.body.motionState = element.properties.motionState || 1;
+				//entity.body.debug = true;
 				if (element.properties.contact) {
 					entity.body.onBeginContact.add(function(body, bodyB){
+						
 						if (body && body.sprite) {
 							if (body.sprite.key === 'dude') {
 								eval(element.properties.contact);
-								element.properties.contact = '';
+								//element.properties.contact = '';
 							}
 						}}, that);
+					}
+				}
+				
+				if (element.properties.setup) {
+					eval(element.properties.setup);
+				}
+				
+				if (element.properties.update) {
+					entity.data.update = element.properties.update;
 				}
 			}
 			
-			if (element.properties.setup) {
-				eval(element.properties.setup);
-			}
-			
-			if (element.properties.update) {
-				entity.data.update = element.properties.update;
-			}
 
 			entities.add(entity);
 		}, this); 
@@ -141,14 +163,15 @@ main.day.prototype = {
 		game.physics.p2.createContactMaterial(boxMaterial, boxMaterial, { friction: 0.2 });
 
 		//  Our two animations, walking left and right.
-		player.animations.add('walk', null, 32, true);
-		player.animations.add('swim', null, 16, true);
+		player.animations.add('walk', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], 32, true);
+		player.animations.add('swim', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], 16, true);
 		player.animations.add('jump', [2], 15, true);
+		player.animations.add('sit', [22], 15, true);
 		player.anchor.setTo(0.5, 0.5);
 
 		//  Finally some stars to collect
 		alarms = game.add.group();
-		for (var i = 0; i < 1; i++)
+		for (var i = 0; i < 0; i++)
 		{
 			var alarm = alarms.create(900 + i * 100, 300, 'alarm');
 			game.physics.p2.enable(alarm);
@@ -162,7 +185,7 @@ main.day.prototype = {
 		this.setupBuoyancy(bodies, p2.vec2.fromValues(0, game.physics.p2.pxmi(waterLevel)));
 		
 		//  The this.score
-		this.scoreText = game.add.text(16, 16, 'this.score: 0', { fontSize: '32px', fill: '#000' });
+		this.scoreText = game.add.text(16, 16, '', { fontSize: '32px', fill: '#000' });
 		this.scoreText.fixedToCamera = true;
 		player.body.onBeginContact.add(this.hitObject, this);
 		
@@ -175,24 +198,24 @@ main.day.prototype = {
 		game.camera.follow(player);
 	},
 	update: function() {
-		if (this.textKey != null)
+		if (main.textKey != null)
 		{
 			game.physics.p2.pause();
 			if (cursors.enter.justDown)
 			{
 				this.textIndex++;
 			}
-			if (this.textIndex < lang[this.textKey].length)
+			if (this.textIndex < lang[main.textKey].length)
 			{
 				textboxText.x = -textbox.width / 2 + 16;
 				textboxText.y = -textbox.height + 16;
-				textboxText.text = lang[this.textKey][this.textIndex]
+				textboxText.text = lang[main.textKey][this.textIndex]
 				textboxContinue.x = textbox.width / 2 - 16;
 				textboxContinue.y = -16;
 			}
 			else
 			{
-				this.textKey = null;
+				main.textKey = null;
 				this.textIndex = 0;
 			}
 			textbox.bringToTop();
@@ -241,7 +264,8 @@ main.day.prototype = {
 		else
 		{
 			//  Stand still
-			player.animations.stop();
+			if (player.animations.currentAnim.name !== 'sit')
+				player.animations.stop();
 		}
 
 		//  Allow the player to jump if they are touching the ground.
@@ -376,6 +400,3 @@ main.day.prototype = {
 		}
 	}
 };
-
-game.state.add('day', main.day);
-game.state.start('day');

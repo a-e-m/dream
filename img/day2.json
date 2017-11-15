@@ -105,7 +105,7 @@
                  "name":"placeholder",
                  "properties":
                     {
-                     "contact":"if (player.data.worked) {main.textKey = \"water\"; main.stage = 1; game.state.start(\"level\"); console.log(player.data);}",
+                     "contact":"if (player.data.worked) {main.textKey = \"water\"; game.state.start(\"water\"); console.log(player.data);}",
                      "motionState":4,
                      "physics":true
                     },

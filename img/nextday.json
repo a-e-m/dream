@@ -105,7 +105,7 @@
                  "name":"placeholder",
                  "properties":
                     {
-                     "contact":"if (player.data.worked) {main.textKey = \"lava\"; main.stage = 3; game.state.start(\"level\"); console.log(player.data);}",
+                     "contact":"if (player.data.worked) {main.textKey = \"lava\"; game.state.start(\"lava\"); console.log(player.data);}",
                      "motionState":4,
                      "physics":true
                     },

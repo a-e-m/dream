@@ -1,15 +1,12 @@
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '');
 
-var main = {};
 
-main.day = function(game) {
+main.lava = function(game) {
 	this.player;
 	this.platforms;
 	this.cursors;
 
 	this.textbox;
 	this.textboxText;
-	this.textKey = "intro";
 	this.textIndex = 0;
 	this.textboxContinue;
 
@@ -17,33 +14,41 @@ main.day = function(game) {
 	this.score = 0;
 	this.scoreText;
 	this.constants = {speed: 300, jump: 300, mass: 50, swimSpeed: 140, dive: 100};
+	
+	this.lavaLevel = 950;
 
 	this.entities;
 	this.lang;
 }
 
-main.day.prototype = {
+main.lava.prototype = {
 	preload: function() {
 		game.load.image('sky', './img/cityscape.png');
-		game.load.image('ground', './img/platform.png');
 		game.load.image('alarm', './img/alarm.png');
-		game.load.image('water', './img/water.png');
 		game.load.image('textbox', './img/textbox.png');
+		game.load.image('placeholder', './img/placeholder.png');
 		game.load.image('house', './img/house.png');
 		game.load.image('boss', './img/boss.png');
 		game.load.image('tree', './img/tree.png');
 		game.load.image('bus', './img/bus.png');
+		game.load.image('chair', './img/chair.png');
+		game.load.spritesheet('lava', './img/lava.png', 384, 432);
+		
 		this.objects = {'house': 1, 'tree': 2, 'bus': 3};
 
 		game.load.spritesheet('dude', './img/bennett.png', 110, 184);
 		
-		game.load.tilemap('map', './img/day2.json', null, Phaser.Tilemap.TILED_JSON);
+		game.load.tilemap('map', './img/lava.json', null, Phaser.Tilemap.TILED_JSON);
 
 		game.load.image('tiles', './img/tiles.png');
 
 		game.load.json('lang', './lang/en-US.json');
 	},
 	create: function() {
+		if (main.music) main.music.destroy();
+		main.music = game.add.audio('music', 0.8, true);
+		main.music.play();
+		
 		game.debug.dirty = true;
 		lang = game.cache.getJSON('lang');
 		textbox = game.add.image(game.camera.width / 2, game.camera.height - 10, 'textbox');
@@ -55,10 +60,7 @@ main.day.prototype = {
 		textbox.addChild(textboxText);
 		textbox.addChild(textboxContinue);
 		
-		game.add.tileSprite(0, 0, 8000, 1500, 'sky');
-		var waterLevel = 1500;
-		game.add.tileSprite(0, waterLevel, 1920, 1200, 'water');
-
+		this.sky = game.add.tileSprite(0, 0, 800, 600, 'sky');
 		
 		map = game.add.tilemap('map');
 
@@ -79,34 +81,39 @@ main.day.prototype = {
 		game.physics.p2.convertTilemap(map, layer);
 		
 		var entities = this.entities = game.add.group();
+		var objects = {};
 		var that = this;
 		map.objects['Object Layer 1'].forEach(function(element) {
-			console.log(element);
 			var type = element.name;
 			var entity = game.add.sprite(element.x, element.y, type);
-			
-			if (element.properties.physics) {
+			objects[type] = entity;
+			if (element.properties) {
+				if (element.properties.physics) {
 				game.physics.p2.enable(entity);
 				entity.body.mass = element.properties.mass || 1;
 				entity.body.motionState = element.properties.motionState || 1;
+				//entity.body.debug = true;
 				if (element.properties.contact) {
 					entity.body.onBeginContact.add(function(body, bodyB){
+						
 						if (body && body.sprite) {
 							if (body.sprite.key === 'dude') {
 								eval(element.properties.contact);
-								element.properties.contact = '';
+								//element.properties.contact = '';
 							}
 						}}, that);
+					}
+				}
+				
+				if (element.properties.setup) {
+					eval(element.properties.setup);
+				}
+				
+				if (element.properties.update) {
+					entity.data.update = element.properties.update;
 				}
 			}
 			
-			if (element.properties.setup) {
-				eval(element.properties.setup);
-			}
-			
-			if (element.properties.update) {
-				entity.data.update = element.properties.update;
-			}
 
 			entities.add(entity);
 		}, this); 
@@ -141,14 +148,15 @@ main.day.prototype = {
 		game.physics.p2.createContactMaterial(boxMaterial, boxMaterial, { friction: 0.2 });
 
 		//  Our two animations, walking left and right.
-		player.animations.add('walk', null, 32, true);
-		player.animations.add('swim', null, 16, true);
+		player.animations.add('walk', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], 32, true);
+		player.animations.add('swim', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], 16, true);
 		player.animations.add('jump', [2], 15, true);
+		player.animations.add('sit', [22], 15, true);
 		player.anchor.setTo(0.5, 0.5);
 
 		//  Finally some stars to collect
 		alarms = game.add.group();
-		for (var i = 0; i < 1; i++)
+		for (var i = 0; i < 0; i++)
 		{
 			var alarm = alarms.create(900 + i * 100, 300, 'alarm');
 			game.physics.p2.enable(alarm);
@@ -156,15 +164,15 @@ main.day.prototype = {
 			alarm.body.setMaterial(boxMaterial);
 		}
 		
-		// Create "water surface"
-		var bodies = _.map(alarms.children, function(s) {return s.body.data;});
-		bodies.push(player.body.data);
-		this.setupBuoyancy(bodies, p2.vec2.fromValues(0, game.physics.p2.pxmi(waterLevel)));
-		
 		//  The this.score
-		this.scoreText = game.add.text(16, 16, 'this.score: 0', { fontSize: '32px', fill: '#000' });
+		this.scoreText = game.add.text(16, 16, '', { fontSize: '32px', fill: '#000' });
 		this.scoreText.fixedToCamera = true;
 		player.body.onBeginContact.add(this.hitObject, this);
+		
+		this.lava = game.add.tileSprite(0, this.lavaLevel, 800, 600, 'lava');
+		this.lava.animations.add('lava', null);
+		this.lava.animations.play('lava', 5, true);
+
 		
 		//  Our controls.
 		cursors = game.input.keyboard.addKeys({ 'up': Phaser.KeyCode.UP,
@@ -175,24 +183,24 @@ main.day.prototype = {
 		game.camera.follow(player);
 	},
 	update: function() {
-		if (this.textKey != null)
+		if (main.textKey != null)
 		{
 			game.physics.p2.pause();
 			if (cursors.enter.justDown)
 			{
 				this.textIndex++;
 			}
-			if (this.textIndex < lang[this.textKey].length)
+			if (this.textIndex < lang[main.textKey].length)
 			{
 				textboxText.x = -textbox.width / 2 + 16;
 				textboxText.y = -textbox.height + 16;
-				textboxText.text = lang[this.textKey][this.textIndex]
+				textboxText.text = lang[main.textKey][this.textIndex]
 				textboxContinue.x = textbox.width / 2 - 16;
 				textboxContinue.y = -16;
 			}
 			else
 			{
-				this.textKey = null;
+				main.textKey = null;
 				this.textIndex = 0;
 			}
 			textbox.bringToTop();
@@ -203,6 +211,21 @@ main.day.prototype = {
 		{
 			textbox.visible = false;
 			game.physics.p2.resume();
+		}
+		
+		this.sky.x = game.camera.x;
+		this.sky.y = game.camera.y;
+		this.sky.tilePosition.x = -game.camera.x;
+		this.sky.tilePosition.y = -game.camera.y;
+		this.lavaLevel -= 0.1;
+		this.lava.x = game.camera.x;
+		this.lava.y = this.lavaLevel;
+		this.lava.tilePosition.x = -game.camera.x;
+		
+		if (player.y > (this.lavaLevel + 10)) {
+			console.log('death');
+			this.lavaLevel = 950;
+			game.state.start('lava');
 		}
 
 		player.body.velocity.x = 0;
@@ -376,6 +399,3 @@ main.day.prototype = {
 		}
 	}
 };
-
-game.state.add('day', main.day);
-game.state.start('day');
