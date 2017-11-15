@@ -353,7 +353,6 @@ main.level.prototype = {
 			if (player.animations.currentAnim.name !== 'sit' || main.stage % 2 == 1)
 				player.animations.stop();
 		}
-		console.log(player.body.velocity.x);
 
 		//  Allow the player to jump if they are touching the ground.
 		if (player.data.water) {
