@@ -2,7 +2,7 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '');
 
 var main = {
 	textKey: "intro",
-	stage: 1
+	stage: 0
 };
 
 main.level = function(game) {
@@ -319,7 +319,7 @@ main.level.prototype = {
 				}
 			}
 			player.body.velocity.x = speed;
-			player.scale.x = main.stage == 1 ? 1 : -1;
+			player.scale.x = player.data.water ? 1 : -1;
 			//  Move to the left
 			if (player.data.water)
 				player.animations.play('swim');
@@ -339,7 +339,7 @@ main.level.prototype = {
 				}
 			}
 			player.body.velocity.x = speed;
-			player.scale.x = main.stage == 1 ? -1 : 1;
+			player.scale.x = player.data.water ? -1 : 1;
 			if (player.data.water)
 				player.animations.play('swim');
 			else if (this.checkSide(p2.vec2.fromValues(0, 1)))
