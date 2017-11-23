@@ -2,7 +2,7 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '');
 
 var main = {
 	textKey: "intro",
-	stage: 1
+	stage: 0
 };
 
 main.level = function(game) {
@@ -17,7 +17,7 @@ main.level = function(game) {
 
 	this.score = 0;
 	this.scoreText;
-	this.constants = {speed: 400, jump: 600, mass: 50, swimSpeed: 300, swimAccel: 10, dive: 160};
+	this.constants = {speed: 300, jump: 300, mass: 50, swimSpeed: 200, swimAccel: 10, dive: 100};
 
 	this.lavaLevel = 950;
 
@@ -28,11 +28,11 @@ main.level = function(game) {
 main.level.prototype = {
 	preload: function() {
 		game.load.image('sky', './img/cityscape.png');
-		if (main.stage != 3) {
+		if (main.stage !== 3) {
 			game.load.image('ground', './img/platform.png');
 		}
 		game.load.image('alarm', './img/alarm.png');
-		if (main.stage != 3) {
+		if (main.stage !== 3) {
 			game.load.image('water', './img/water.png');
 		}
 		game.load.image('textbox', './img/textbox.png');
@@ -40,16 +40,16 @@ main.level.prototype = {
 		game.load.image('house', './img/house.png');
 		game.load.image('boss', './img/boss.png');
 		game.load.image('tree', './img/tree.png');
-		if (main.stage == 1) {
+		if (main.stage === 1) {
 			game.load.image('bus', './img/sub.png');
 		} else {
 			game.load.image('bus', './img/bus.png');
 		}
 		game.load.image('chair', './img/chair.png');
-		if (main.stage == 3) {
+		if (main.stage === 3) {
 			game.load.spritesheet('lava', './img/lava.png', 384, 432);
 		}
-		if (main.stage % 2 == 0) {
+		if (main.stage % 2 === 0) {
 			//game.load.audio('music', ['img/day.wav']);
 		} else {
 			//game.load.audio('music', ['img/dream_fast.wav']);
@@ -57,7 +57,7 @@ main.level.prototype = {
 
 		this.objects = {'house': 1, 'tree': 2, 'bus': 3};
 
-		if (main.stage == 1) {
+		if (main.stage === 1) {
 			game.load.spritesheet('dude', './img/swim.png', 297, 132);
 		} else {
 			game.load.spritesheet('dude', './img/bennett.png', 110, 184);
@@ -123,7 +123,7 @@ main.level.prototype = {
 		layer.resizeWorld();
 
 		game.physics.startSystem(Phaser.Physics.P2JS);
-		game.physics.p2.gravity.y = 1200;
+		game.physics.p2.gravity.y = 300;
 		game.physics.p2.world.defaultContactMaterial.friction = 0.2;
 		game.physics.p2.restitution = 0.2;
 		//game.physics.p2.world.setGlobalRelaxation(1);
@@ -430,7 +430,7 @@ main.level.prototype = {
 		var liftForce = [0,0];
 		var viscousForce = [0,0];
 		var shapeAngle = 0;
-		k = 14; // up force per submerged "volume"
+		k = 8; // up force per submerged "volume"
 		c = 50; // viscosity
 		var v = [0,0];
 		var aabb = new p2.AABB();
