@@ -44,7 +44,7 @@
                  "name":"bus",
                  "properties":
                     {
-                     "contact":"if(!entity.data.touched) {entity.data.touched = true;player.animations.stop();main.textKey = 'bus'; entity.bringToTop();player.animations.play('sit');}",
+                     "contact":"if(!entity.data.touched) {entity.data.touched = true;player.animations.stop(); if (!player.data.worked) { main.textKey = 'bus'; } entity.bringToTop();player.animations.play('sit');}",
                      "mass":1000,
                      "physics":true,
                      "setup":"entity.body.clearShapes();\nentity.body.addRectangle(400, 10, 0, 90, 0);\nentity.body.addRectangle(20, 70, -200, 50, 0);\nentity.body.addRectangle(20, 70, 200, 50, 0);",
@@ -105,7 +105,7 @@
                  "name":"placeholder",
                  "properties":
                     {
-                     "contact":"if (player.data.worked) {main.textKey = \"water\"; game.state.start(\"water\"); console.log(player.data);}",
+                     "contact":"if (player.data.worked) {main.textKey = \"water\"; main.stage = 1; game.state.start(\"level\"); console.log(player.data);}",
                      "motionState":4,
                      "physics":true
                     },
