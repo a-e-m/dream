@@ -1,0 +1,90 @@
+Game fully playable, with all the tools required to play, evaluation form, due Wednesday
+This is your chance to share your game with a wider audience: We will invite some guest critics as well as your friends to class from 10 to 12, to come test your games and give you feedback via the evaluation forms you provide. 
+Base Points:	10 for completing the project
+Extra Points: 	10 for bringing more than one unique friend
+Bonus Points: 	5 for in-game evaluation forms
+Presentation: 
+Comparison of playtesting and expert review methods, by Chris Zhang
+PC Cafe by Ahyeong and Si Yoon
+Lecture by Scott Rettberg, Professor of Electronic Literature, Bergen, Norway
+
+Evaluation Questions: 
+GU1 Audio-visual representation supports the game 
+The game graphics should support gameplay and story and be informative for the player. In addition, the graphical look and feel should be consistent throughout the game. Audio can be used to evoke emotions and increase immersion. A good sound environment in the game supports a positive gaming experience. The graphics or audio should not prevent the player from performing actions or make them unnecessarily difficult. 
+
+GU2 Screen layout is efficient and visually pleasing 
+The layout should present all necessary information for the player, but on the other hand, if the screen is filled with all kinds of information, it starts to look crowded. It is important that the player finds the navigation controls and they should not be mixed with the information that needs to be visible on the screen. 
+
+GU3 Device UI and game UI are used for their own purposes 
+It should always be noticeable whether the player is dealing with the game user interface or device functions. The game interface should not use the device’s user interface widgets in the game interface, because it breaks the immersion. The most impressive immersion is achieved when the game uses full-screen mode hiding other features. 
+
+GU4 Indicators are visible 
+The player should see the information such as the current state of the game and status of the game character that is required for being able to play the game. Information that is frequently needed should be visible for the player all the time — if possible. 
+
+GU5 The player understands the terminology 
+The terminology that is used in the game should be understandable and not misleading or unfamiliar for the players. Technical jargon should be avoided. For instance, terminology that is related to the game concept or features that the game needs from the device should be translated into more understandable language. 
+
+GU6 Navigation is consistent, logical, and minimalist 
+Navigation consists of the game menu and the game world. The game menu consists of settings and selections for the desired game session. Different functions should be organized reasonably and possibly on different screens. However, long navigation paths should be avoided. Short navigation paths provide more clarity and are easier to remember. In the main game menu, the player should be able to start a game and have access to other important game features. In the game world, navigation should be intuitive and natural. Regardless of the complexity of the game world, players should be able to navigate there smoothly. With a proper set of control keys, navigation can be very intuitive and almost invisible. 
+
+GU7 Control keys are consistent and follow standard conventions 
+Using common conventions in control keys reduces the time that is needed to learn to play the game since the player can use his or her knowledge from other games. Game devices usually have specific keys for certain actions and every game should follow them. 
+
+GU8 Game controls are convenient and flexible 
+Novice players usually need only a subset of the controls when they start playing the game. On the other hand, veteran players often need shortcuts and more advanced commands. It should be possible to customize the game controls or use shortcuts or macros. However, using shortcuts should not provide a major edge in a competitive player vs. player game. The configurability and amount of controls needed to play the game should be kept at the minimum, but they need to be sufficient. In addition, the controls should be designed according to the device’s capabilities. 
+
+GU9 The game gives feedback on the player’s actions 
+A good user interface has a low response time on the player’s actions. An action can be either a single key press or a more complicated input sequence. The player should notice immediately that the game has recognized the action by providing feedback. The most common way of providing feedback is to present it graphically. Other alternatives are to use audio or tactile feedback. Providing only auditory feedback is not acceptable since a player may be playing the game without sounds. Although the game needs to respond immediately to the player’s actions, the consequences of the action can be shown to the player later. If an action cannot be performed immediately, the game should notify the player about the delay. 
+
+GU10 The player cannot make irreversible errors 
+The game UI should confirm actions that can cause serious and irreversible damage, which affects the player’s ability to play the game. Such errors are typically related to the game character or player’s progress in the game. When mistakes happen, it is helpful to enable recovery. 
+
+GU11 The player does not have to memorize things unnecessarily 
+The game should not stress the user's memory unnecessarily, unless it is part of the gameplay. 
+
+GU12 The game contains help 
+The players do not often read manuals. Instead, the game should teach the player what he or she needs to know to start playing the game. This can be done through a tutorial mode at the beginning of the game. The tutorial mode should be divided into chapters that teach a couple of things at the beginning. Ideally, the tutorial could be embedded completely in the game so that help would be provided every time when it is really needed. Help is also often needed in error situations. If the game provides useful error messages, the player can understand better what caused the problem. 
+
+GP1 The game provides clear goals or supports player-created goals 
+The players should be able to understand goals that exist in the game. The goals can be either set by the game or created by the players. The game should contain both short-term and long-term goals. Short-term goals provide repeated opportunities for reinforcement and keep players motivated to play the game. Long-term goals are usually more difficult to achieve and they can consist of several short term goals. 
+
+GP2 The player sees the progress in the game and can compare the results 
+The players should have enough information so that they can see their progress towards the goals in the game. The progress can be shown to the player explicitly, for instance with numbers, or implicitly, for instance, by changing the behavior of non-payer characters or the game world. The players feel more motivated if they can compare themselves with the other players or the previous achievements. Traditionally, this has been done with high-score lists, rankings, character levels, or different titles. 
+
+GP3 The players are rewarded and rewards are meaningful 
+The players should receive a meaningful reward as they progress in the game. In addition, the reward should be adjusted to the challenge that the player had to face in order to get it. The rewards schedule should be varying and frequent, but still unpredictable. 
+
+GP4 The player is in control 
+The game should provide at least an illusion that the player is in control of what is happening in the game world. The players should be able to decide on actions they want to take and these actions should have an influence on the game world. 
+
+GP5 Challenge, strategy, and pace are in balance 
+The game should be designed so that the challenge is comparable to player’s current skills, then the players do not feel frustrated or bored with the game. In single-player games, the player can often choose the difficulty level and thus affect the challenge. The players learn new strategies as they play the game. There should not be dominating strategies for any part of the game. The pace should be adjusted to the game style and it can be intensive or deliberate. The game should allow the player to take a deep breath once in a while during the play sessions. 
+
+GP6 The first-time experience is encouraging 
+The first impression of the game is formed within a few minutes and it is very difficult to change. The players should feel that they have learned the basics and have accomplished something. The first play session should make the player desire for the next play session. 
+
+GP7 The game story supports the gameplay and is meaningful 
+Even though the story plays an important role in many games, it should not dominate the gameplay. Some games do not even have or need a game story. If the game has a story, it should fit the other elements in the game and sound plausible to the player. The dialogue with non-player characters (NPC) should be meaningful and interesting for the player. 
+
+GP8 There are no repetitive or boring tasks 
+The game should not require repetition of tasks without changing any conditions. Often, this repetition happens when the player needs to reach a certain goal before the game becomes interesting or challenging. However, during the training phase (tutorials), it is useful to repeat certain tasks so that the player learns and practices for example how the character is controlled in the game. 
+
+GP9 The players can express themselves 
+The players should be able express themselves by, for instance, customizing their characters, acting in a certain way, or modifying the game world. Allowing the players to customize and personalize their game characters makes it more probable that they feel attachment to a game. 
+
+GP10 The game supports different playing styles 
+The players can vary a lot in terms of both experience and preferred play styles. There are also different playing styles that should be supported at least in the more complex games. The player types are defined based on how the players prefer to interact with the game world or with the other players, Four common player types are: A) Achievers, who like to compete with the game mechanics. B) Explorers, who wish to explore different aspects of the game. C) Socializers, who prefer to socialize with other players D) Killers, who enjoy dominating other players. 
+
+GP11 The game does not stagnate 
+The players should always feel that it is possible to reach the goals and the game progresses. The game should recognize immediately when the game is over and inform the players. Ending of the play session should be clearly indicated and restarting the game should be possible. 
+
+GP12 The game is consistent 
+The game world and actions should be consistent and logical for the player. If something works in the beginning, the player assumes that it also works later on. Correspondingly, if the player is able to perform a certain action in the game world or for a game item, the player assumes that similar kind of action is possible for other similar objects or in the similar situation as well. Moreover, if the game world resembles the real world, the player assumes that the same principles also work in the game world. The game should not contain invisible walls. 
+
+GP13 The game uses orthogonal unit differentiation 
+Each game item should have a purpose in the game world and it should be notably different to other similar game items. In addition, if the player needs to select character classes or roles in the game, they should be functionally different. 
+
+GP14 The player does not lose any hard-won possessions 
+The game should maintain possessions that the player has earned while playing the game and the player cannot lose them accidentally. However, in some cases the game can provide very high risks and the player can stake valuable game items which can be lost. 
+
+Game in a format that can be distributed to the target device, due Wednesday. This is your final!
