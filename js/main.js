@@ -50,10 +50,11 @@ main.level.prototype = {
 			game.load.spritesheet('lava', './img/lava.png', 384, 432);
 		}
 		if (main.stage % 2 === 0) {
-			//game.load.audio('music', ['img/day.wav']);
+			game.load.audio('music', ['img/day.ogg']);
 		} else {
-			//game.load.audio('music', ['img/dream_fast.wav']);
+			game.load.audio('music', ['img/dream_fast.ogg']);
 		}
+		game.load.audio('clock', ['img/clock.ogg']);
 
 		this.objects = {'house': 1, 'tree': 2, 'bus': 3};
 
@@ -76,7 +77,7 @@ main.level.prototype = {
 			
 		}
 		
-		if (main.stage == 1) {
+		if (main.stage === 1) {
 			game.load.image('tiles', './img/oceantiles.png');
 		} else {
 			game.load.image('tiles', './img/tiles.png');
@@ -86,7 +87,7 @@ main.level.prototype = {
 	},
 	create: function() {
 		if (main.music) main.music.destroy();
-		main.music = game.add.audio('music', 0.8, true);
+		main.music = game.add.audio('music', 0.05, true);
 		main.music.play();
 		
 		game.debug.dirty = true;
@@ -100,14 +101,12 @@ main.level.prototype = {
 		textbox.addChild(textboxText);
 		textbox.addChild(textboxContinue);
 		
-		if (main.stage == 3) {
-			this.sky = game.add.tileSprite(0, 0, 800, 600, 'sky');
-		} else {
-			game.add.tileSprite(0, 0, 12000, 1500, 'sky');
-		}
-		var waterLevel = 1500;
-		if (main.stage % 2 == 0) {
-			game.add.tileSprite(0, waterLevel, 1920, 1200, 'water');
+		this.sky = game.add.tileSprite(0, 0, 800, 600, 'sky');
+
+		if (main.clock) main.clock.destroy();
+		if (main.stage % 2 === 1) {
+			main.clock = game.add.audio('clock', 0.05, true);
+			main.clock.play();
 		}
 
 		
@@ -163,12 +162,13 @@ main.level.prototype = {
 
 			entities.add(entity);
 		}, this); 
+		this.objects = objects;
 
 		// The player and its settings
 		player = game.add.sprite(250, 550, 'dude', 0, entities);
 		game.physics.p2.enable(player);
 		player.body.clearShapes();
-		if (main.stage == 1) {
+		if (main.stage === 1) {
 			player.body.addRectangle(140, 60, 0, 0, 0);
 		} else {
 			player.body.addRectangle(40, 145, 0, 0, 0);
@@ -198,7 +198,7 @@ main.level.prototype = {
 		game.physics.p2.createContactMaterial(boxMaterial, boxMaterial, { friction: 0.2 });
 
 		//  Our two animations, walking left and right.
-		if (main.stage == 1) {
+		if (main.stage === 1) {
 			player.animations.add('walk', null, 32, true);
 			player.animations.add('swim', null, 16, true);
 		} else {
@@ -208,25 +208,12 @@ main.level.prototype = {
 		}
 		player.animations.add('jump', [2], 15, true);
 		player.anchor.setTo(0.5, 0.5);
-
-		//  Finally some alarms to collect
-		alarms = game.add.group();
-		for (var i = 0; i < 0; i++)
-		{
-			var alarm = alarms.create(900 + i * 100, 300, 'alarm');
-			game.physics.p2.enable(alarm);
-			alarm.body.mass = 20;
-			alarm.body.setMaterial(boxMaterial);
-		}
 		
+		var waterLevel = 300;
 		// Create "water surface"
-		if (main.stage == 1) {
-			waterLevel = 300;
-			game.add.tileSprite(0, waterLevel - 80, 15020, 3000, 'water');
-			console.log(waterLevel);
-		}
-		if (main.stage != 3) {
-			var bodies = _.map(alarms.children, function(s) {return s.body.data;});
+		if (main.stage === 1) {
+			this.water = game.add.tileSprite(0, waterLevel - 80, 800, 1500, 'water');
+			var bodies = _.map([this.objects.alarm], function(s) {return s.body.data;});
 			bodies.push(player.body.data);
 			this.setupBuoyancy(bodies, p2.vec2.fromValues(0, game.physics.p2.pxmi(waterLevel)));
 		}
@@ -236,7 +223,7 @@ main.level.prototype = {
 		this.scoreText.fixedToCamera = true;
 		player.body.onBeginContact.add(this.hitObject, this);
 		
-		if (main.stage == 3) {
+		if (main.stage === 3) {
 			this.lava = game.add.tileSprite(0, this.lavaLevel, 800, 600, 'lava');
 			this.lava.animations.add('lava', null);
 			this.lava.animations.play('lava', 5, true);
@@ -281,11 +268,17 @@ main.level.prototype = {
 			game.physics.p2.resume();
 		}
 
-		if (main.stage == 3) {
-			this.sky.x = game.camera.x;
-			this.sky.y = game.camera.y;
-			this.sky.tilePosition.x = -game.camera.x;
-			this.sky.tilePosition.y = -game.camera.y;
+		this.sky.x = game.camera.x;
+		this.sky.y = game.camera.y;
+		this.sky.tilePosition.x = -game.camera.x;
+		this.sky.tilePosition.y = -game.camera.y;
+
+		if (main.stage === 1) {
+			this.water.x = game.camera.x;
+			//this.water.y = this.lavaLevel;
+			this.water.tilePosition.x = -game.camera.x;
+		}
+		else if (main.stage === 3) {
 			this.lavaLevel -= 0.1;
 			this.lava.x = game.camera.x;
 			this.lava.y = this.lavaLevel;
@@ -297,6 +290,11 @@ main.level.prototype = {
 				game.state.start('level');
 			}
 
+		}
+
+		if (this.objects.alarm) {
+			var volume = 1.0 / (Math.abs(this.objects.alarm.body.x - player.body.x, 2) / 800);
+			main.clock.volume = Math.max(0.05, Math.min(1.0, volume));
 		}
 
 		var leftTouch = this.checkSide(p2.vec2.fromValues(-1, 0)), 
@@ -319,7 +317,7 @@ main.level.prototype = {
 				}
 			}
 			player.body.velocity.x = speed;
-			player.scale.x = main.stage == 1 ? 1 : -1;
+			player.scale.x = main.stage === 1 ? 1 : -1;
 			//  Move to the left
 			if (player.data.water)
 				player.animations.play('swim');
@@ -339,7 +337,7 @@ main.level.prototype = {
 				}
 			}
 			player.body.velocity.x = speed;
-			player.scale.x = main.stage == 1 ? -1 : 1;
+			player.scale.x = main.stage === 1 ? -1 : 1;
 			if (player.data.water)
 				player.animations.play('swim');
 			else if (this.checkSide(p2.vec2.fromValues(0, 1)))
@@ -350,7 +348,7 @@ main.level.prototype = {
 		else
 		{
 			//  Stand still
-			if (player.animations.currentAnim.name !== 'sit' || main.stage % 2 == 1)
+			if (player.animations.currentAnim.name !== 'sit' || main.stage % 2 === 1)
 				player.animations.stop();
 		}
 
