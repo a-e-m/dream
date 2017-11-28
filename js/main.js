@@ -2,7 +2,7 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '');
 
 var main = {
 	textKey: "intro",
-	stage: 0
+	stage: 5
 };
 
 main.level = function(game) {
@@ -27,7 +27,12 @@ main.level = function(game) {
 
 main.level.prototype = {
 	preload: function() {
-		game.load.image('sky', './img/cityscape.png');
+		if (main.stage === 5) {
+			game.load.image('sky', './img/cityscape_turned.png');
+		} else {
+			game.load.image('sky', './img/cityscape.png');
+		}
+		
 		if (main.stage !== 3) {
 			game.load.image('ground', './img/platform.png');
 		}
@@ -74,11 +79,15 @@ main.level.prototype = {
 		} else if (main.stage === 3) {
 			game.load.tilemap('map', './img/lava.json', null, Phaser.Tilemap.TILED_JSON);
 		} else if (main.stage === 4) {
-			
+			game.load.tilemap('map', './img/thirdday.json', null, Phaser.Tilemap.TILED_JSON);
+		} else if (main.stage === 5) {
+			game.load.tilemap('map', './img/sideways.json', null, Phaser.Tilemap.TILED_JSON);
 		}
 		
 		if (main.stage === 1) {
 			game.load.image('tiles', './img/oceantiles.png');
+		} else if (main.stage === 5) {
+			game.load.image('tiles', './img/tiles_turned.png');
 		} else {
 			game.load.image('tiles', './img/tiles.png');
 		}
@@ -159,13 +168,19 @@ main.level.prototype = {
 				}
 			}
 			
-
+			if (main.stage === 5) {
+				entity.rotation = 90;
+			}
 			entities.add(entity);
 		}, this); 
 		this.objects = objects;
 
 		// The player and its settings
 		player = game.add.sprite(250, 550, 'dude', 0, entities);
+		if (main.stage === 5) {
+			player.x = 600;
+			player.y = 200;
+		}
 		game.physics.p2.enable(player);
 		player.body.clearShapes();
 		if (main.stage === 1) {
@@ -213,7 +228,7 @@ main.level.prototype = {
 		// Create "water surface"
 		if (main.stage === 1) {
 			this.water = game.add.tileSprite(0, waterLevel - 80, 800, 1500, 'water');
-			var bodies = _.map([this.objects.alarm], function(s) {return s.body.data;});
+			var bodies = _.map([this.objects.alarm, this.objects.bus], function(s) {return s.body.data;});
 			bodies.push(player.body.data);
 			this.setupBuoyancy(bodies, p2.vec2.fromValues(0, game.physics.p2.pxmi(waterLevel)));
 		}
