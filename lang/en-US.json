@@ -12,7 +12,7 @@
 	],
 	"boss": [
 		"My boss says good morning,\nthen assigns me work for the day.",
-		"I'm a temp at a big software company.",
+		"I'm a minor employee\nat a big software company.",
 		"Recently I've been manually\nentering data into spreadsheets.",
 		"I glace out the window,\ntoward the small park off to the right.\nDespite working here for 4 years,\n I've never once gone to that park.",
 		"I've always wished I could\nhave a job outdoors\nsomething that didn't just\ninvolve sitting at a desk.",
@@ -70,8 +70,6 @@
 		"He says 'I need to talk to\nyou.'",
 		"'We've been making cutbacks and\nI'm sorry to inform you...",
 		"we can no longer employ you,\nas of today.'",
-		"'We've notified the temp agency.'",
-		"The world feels like\nit's spiraling away from me.",
 		"I hate my job, but\nwhat else am I going to do?"
 	],
 	"lava": [
