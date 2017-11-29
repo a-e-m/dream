@@ -5,6 +5,31 @@ var main = {
 	stage: 0
 };
 
+main.start = function(game) {
+}
+
+main.start.prototype = {
+	preload: function() {
+		game.load.image('title', './img/title.png');
+	},
+	create: function() {
+		game.add.image(0, 0, 'title');
+		this.cursors = game.input.keyboard.addKeys({
+		'enter': Phaser.KeyCode.ENTER,
+		'space': Phaser.KeyCode.SPACE });
+	},
+	update: function() {
+		if (this.cursors.enter.justDown || this.cursors.space.justDown) {
+			game.state.start('level');
+		}
+		
+	},
+	render: function () {
+		
+	}
+};
+
+
 main.level = function(game) {
 	this.player;
 	this.platforms;
@@ -29,6 +54,8 @@ main.level.prototype = {
 	preload: function() {
 		if (main.stage === 5) {
 			game.load.image('sky', './img/cityscape_turned.png');
+		} else if (main.stage === 6) {
+			game.load.image('sky', './img/garden.png');
 		} else {
 			game.load.image('sky', './img/cityscape.png');
 		}
@@ -82,6 +109,8 @@ main.level.prototype = {
 			game.load.tilemap('map', './img/thirdday.json', null, Phaser.Tilemap.TILED_JSON);
 		} else if (main.stage === 5) {
 			game.load.tilemap('map', './img/sideways.json', null, Phaser.Tilemap.TILED_JSON);
+		} else if (main.stage === 6) {
+			game.load.tilemap('map', './img/end.json', null, Phaser.Tilemap.TILED_JSON);
 		}
 		
 		if (main.stage === 1) {
@@ -249,14 +278,15 @@ main.level.prototype = {
 			'down': Phaser.KeyCode.DOWN,
 			'left': Phaser.KeyCode.LEFT,
 			'right': Phaser.KeyCode.RIGHT,
-			'enter': Phaser.KeyCode.ENTER });
+			'enter': Phaser.KeyCode.ENTER,
+			'space': Phaser.KeyCode.SPACE });
 		game.camera.follow(player);
 	},
 	update: function() {
 		if (main.textKey != null)
 		{
 			game.physics.p2.pause();
-			if (this.cursors.enter.justDown)
+			if (this.cursors.enter.justDown || this.cursors.space.justDown)
 			{
 				this.textIndex++;
 			}

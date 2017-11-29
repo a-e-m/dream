@@ -12,8 +12,10 @@
 	],
 	"boss": [
 		"My boss says good morning,\nthen assigns me work for the day.",
+		"I'm a temp at a big software company.",
 		"Recently I've been manually\nentering data into spreadsheets.",
 		"I glace out the window,\ntoward the small park off to the right.\nDespite working here for 4 years,\n I've never once gone to that park.",
+		"I've always wished I could\nhave a job outdoors\nsomething that didn't just\ninvolve sitting at a desk.",
 		"I sigh and get back to my work.\nThe day drags by...",
 		"...",
 		"...",
@@ -27,11 +29,14 @@
 	],
 	"waterAlarm": [
 		"My alarm clock begins to ring\nwaking me from my strange dream.",
-		"Time to go to work..."
+		"My dream about a world\nfilled with water was strange",
+		"and yet in a strange way\nI liked it more than the blandness\nof everyday life",
+		"Time to go to work...",
+		"and return to my mind-numbingly\nboring routine."
 	],
 	"bus2": [
 		"As I get on the bus,\nI notice a woman and\n her child sitting in front of me.",
-		"The child appears\n to be talking to an\nimaginary friend named Barth.",
+		"The child appears\n to be talking to an\nimaginary friend.",
 		"It reminds me of how imaginative\n I used to be as a child.",
 		"One of my favorite games involved\npretending that the floor had turned into lava.",
 		"Of course,\nif you touched the floor,\nyou would 'die'.",
@@ -39,16 +44,53 @@
 	],
 	"boss2": [
 		"My boss says good morning,\nthen assigns me work for the day.",
+		"He seems very anxious.\nThe company must not be doing well.",
 		"Once again, I'm manually\nentering data into spreadsheets.",
-		"For a moment, I think of the\ninnocence of my childhood.\nBut of course, nothing innocent can ever last.",
+		"For a moment, I think of the\ninnocence of my childhood,\nof playing in the park.",
+		"But of course,\nnothing innocent can ever last.",
 		"I sigh and get back to my work.\nThe day drags by...",
-		"...",
 		"...",
 		"But eventually I'm done.",
 		"Time to go home. (To the left)"
 	],
+	"lavaAlarm": [
+		"My alarm clock rings,\nabruptly interrupting my dream",
+		"Perhaps it was a nightmare",
+		"But at least it wasn't\n so bland.",
+		"I really felt emotion\nand not so dead inside."
+	],
+	"bus3": [
+		"I slump into my bus seat",
+		"My life is like riding a bus:\nI'm not in the driver's seat",
+		"I feel powerless,\nlike I have...",
+		"no control at all"
+	],
+	"boss3": [
+		"Towards the end of the day,\nmy boss approaches me carefully",
+		"He says 'I need to talk to\nyou.'",
+		"'We've been making cutbacks and\nI'm sorry to inform you...",
+		"we can no longer employ you,\nas of today.'",
+		"'We've notified the temp agency.'",
+		"The world feels like\nit's spiraling away from me.",
+		"I hate my job, but\nwhat else am I going to do?"
+	],
 	"lava": [
 		"Once again, I drift off into dreamland.",
-		"As I slip away,\nI think once more about\nthe imaginative child I used to be."
+		"As I slip away,\nI think once more about\nthe imaginative child I used to be,",
+		"pretending the floor is lava and so on..."
+	],
+	"sideways": [
+		"After I return from work,\nmy mind races",
+		"I lie in bed, wide awake",
+		"The world feels like\nit's spinning away from me",
+		"eventually I fall asleep,\nfrom pure exhaustion."
+	],
+	"sidewaysAlarm": [
+		"I awake with a start\nfrom my bizarre dream.",
+		"Somehow, I feel much better\nthan I did yesterday.",
+		"In a strange way\nI feel free.",
+		"The world seems wide open\nand full of possibilities.",
+		"I gather up my resolve,\nstart looking for a new job...",
+		"and I set off into the future\nwith nothing but my hopes and dreams."
 	]
 }

@@ -44,7 +44,6 @@
                  "name":"bus",
                  "properties":
                     {
-                     "contact":"if(!entity.data.touched) {entity.data.touched = true;player.animations.stop(); if (!player.data.worked) { main.textKey = 'bus'; } entity.bringToTop();player.animations.play('sit');}",
                      "mass":1000,
                      "physics":true,
                      "setup":"entity.body.clearShapes();\nentity.body.addRectangle(400, 10, 0, 90, 0);\nentity.body.addRectangle(20, 70, -200, 50, 0);\nentity.body.addRectangle(20, 70, 200, 50, 0);",
@@ -52,7 +51,6 @@
                     },
                  "propertytypes":
                     {
-                     "contact":"string",
                      "mass":"int",
                      "physics":"bool",
                      "setup":"string",
@@ -77,52 +75,6 @@
                  "y":7714
                 }, 
                 {
-                 "height":98,
-                 "id":45,
-                 "name":"boss",
-                 "properties":
-                    {
-                     "contact":"if(!entity.data.touched) {entity.data.touched = true;player.animations.play('sit');\nmain.textKey = \"boss\"; player.data.worked = true; objects.bus.data.touched = false; objects.bus.scale.x = -1;}",
-                     "mass":50,
-                     "physics":true
-                    },
-                 "propertytypes":
-                    {
-                     "contact":"string",
-                     "mass":"int",
-                     "physics":"bool"
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":148,
-                 "x":569,
-                 "y":6921
-                }, 
-                {
-                 "height":158,
-                 "id":46,
-                 "name":"placeholder",
-                 "properties":
-                    {
-                     "contact":"if (player.data.worked) {main.textKey = \"water\"; main.stage = 1; game.state.start(\"level\"); console.log(player.data);}",
-                     "motionState":4,
-                     "physics":true
-                    },
-                 "propertytypes":
-                    {
-                     "contact":"string",
-                     "motionState":"int",
-                     "physics":"bool"
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":80,
-                 "x":562,
-                 "y":120
-                }, 
-                {
                  "height":60,
                  "id":48,
                  "name":"chair",
@@ -142,6 +94,27 @@
                  "width":90,
                  "x":810,
                  "y":948
+                }, 
+                {
+                 "height":43,
+                 "id":51,
+                 "name":"alarm",
+                 "properties":
+                    {
+                     "contact":"main.textKey = \"sidewaysAlarm\"; main.stage = 6; game.state.start(\"level\");",
+                     "physics":true
+                    },
+                 "propertytypes":
+                    {
+                     "contact":"string",
+                     "physics":"bool"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":57,
+                 "x":555,
+                 "y":7160
                 }],
          "offsetx":-10,
          "offsety":-12,
@@ -151,7 +124,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":51,
+ "nextobjectid":52,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.0.3",
