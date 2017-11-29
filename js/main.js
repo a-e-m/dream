@@ -2,7 +2,7 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '');
 
 var main = {
 	textKey: "intro",
-	stage: 5
+	stage: 0
 };
 
 main.level = function(game) {
