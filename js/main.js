@@ -72,6 +72,7 @@ main.level.prototype = {
 		game.load.image('house', './img/house.png');
 		game.load.image('boss', './img/boss.png');
 		game.load.image('tree', './img/tree.png');
+		game.load.image('end', './img/end.png');
 		if (main.stage === 1) {
 			game.load.image('bus', './img/sub.png');
 		} else {
