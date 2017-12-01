@@ -97,6 +97,13 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
+html {
+    background-color: #333;
+}
+
+canvas {
+    margin: auto;
+}
 
 
 
