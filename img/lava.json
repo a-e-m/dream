@@ -80,7 +80,7 @@
                  "name":"alarm",
                  "properties":
                     {
-                     "contact":"main.textKey = \"waterAlarm\"; main.stage = 4; game.state.start(\"level\");",
+                     "contact":"main.textKey = \"lavaAlarm\"; main.stage = 4; game.state.start(\"level\");",
                      "mass":50,
                      "physics":true
                     },

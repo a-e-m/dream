@@ -210,6 +210,9 @@ main.level.prototype = {
 		if (main.stage === 5) {
 			player.x = 600;
 			player.y = 200;
+		} else 	if (main.stage === 6) {
+			player.x = 100;
+			player.y = 200;
 		}
 		game.physics.p2.enable(player);
 		player.body.clearShapes();
